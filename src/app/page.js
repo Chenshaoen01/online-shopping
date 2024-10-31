@@ -1,101 +1,70 @@
-import Image from "next/image";
-
+import Navbar from "@/components/Navbar";
+import FAQComponent from "@/components/FAQComponent";
+import BannerCarousel from "@/components/BannerCarousel";
+import ProductCarousel from "@/components/ProductCarousel"
+import Link from 'next/link';
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const categoryDataList = [
+    {
+      category_id: "product1",
+      category_img: 'http://localhost:3010/cat-tree.jpg',
+      category_name: "找飼料",
+      category_en_name: "Food",
+    },
+    {
+      category_id: "product1",
+      category_img: 'http://localhost:3010/cat-tree.jpg',
+      category_name: "找玩具",
+      category_en_name: "Toys",
+    },
+    {
+      category_id: "product1",
+      category_img: 'http://localhost:3010/cat-tree.jpg',
+      category_name: "其他好物",
+      category_en_name: "Others",
+    }
+  ]
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const productDataList = []
+  for (let i = 1; i <= 4; i++) {
+    productDataList.push({
+      product_id: "product1",
+      product_img: "",
+      product_name: "商品名稱",
+      product_info: "",
+      product_price: 1500
+    })
+  }
+
+  return <>
+    <Navbar></Navbar>
+    <div className="main-content-area">
+      {/* Banner 輪播 */}
+      <BannerCarousel></BannerCarousel>
+      <div className="custom-container">
+        {/* 商品類別連結 */}
+        <div className="title-pill mt-12 mb-16">商品類別</div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-y-8 mb-32 gap-x-4">
+          {
+            categoryDataList.map(category =>
+              <div className="flex justify-center">
+                <div className="category-card">
+                  <p className="category-card-title">{category.category_name}</p>
+                  <div className="category-card-en font-bold">{category.category_en_name}</div>
+                  <img className="category-card-icon my-4" src='/arrow.png'></img>
+                  <div className="category-card-img" style={{ backgroundImage: `url('${category.category_img}')` }}></div>
+                </div>
+              </div>)
+          }
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        {/* 推薦商品 */}
+        <div className="title-pill mb-16">推薦商品</div>
+        <ProductCarousel></ProductCarousel>
+        {/* 常見問題 */}
+        <div className="title-pill mb-16">常見問題</div>
+        <FAQComponent></FAQComponent>
+        <Link href="/FAQ" className="mt-4 mx-auto button-dark button-extra-large">其他常見問題</Link>
+      </div>
     </div>
-  );
+  </>;
 }
