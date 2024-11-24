@@ -2,21 +2,15 @@ import Navbar from "@/components/Navbar";
 import FAQComponent from "@/components/FAQComponent";
 
 export default async () => {
-    const questionList = []
-    for (let i = 1; i <= 5; i++) {
-        questionList.push({
-            question_id: "product1",
-            question_title: "問題1",
-            question_answer: "回答1",
-        })
-    }
+    const questionList = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/question/getAll`)
+                               .then(res => res.json())
 
     return <>
         <Navbar></Navbar>
         <div className="main-content-area">
             <div className="custom-container">
                 <div className="section-title my-8">問題列表</div>
-                <FAQComponent></FAQComponent>
+                <FAQComponent questionSourceList={questionList}></FAQComponent>
             </div>
         </div>
     </>

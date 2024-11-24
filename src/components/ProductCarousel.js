@@ -8,26 +8,15 @@ import 'swiper/css/navigation';
 
 import { Navigation } from 'swiper/modules';
 
-export default function App() {
-    const productDataList = []
-    for (let i = 1; i <= 4; i++) {
-        productDataList.push({
-            product_id: "product1",
-            product_img: "",
-            product_name: `商品名稱${i}`,
-            product_info: "",
-            product_price: 1500
-        })
-    }
-
+export default function App({productList}) {
     return (
         <>
             <div className="hidden lg:grid lg:grid-cols-4 gap-y-4 mt-8 mb-32">
                 {
-                    productDataList.map((product, productIndex) =>
+                    Array.isArray(productList) && productList.map((product, productIndex) =>
                         <div className="flex justify-center" key={product.product_id + productIndex}>
                             <Link className="product-card" href={`/Product/Detail/${product.product_id}`}>
-                                <div className="product-img" style={{ backgroundImage: `url('http://localhost:3010/cat-tree.jpg')` }}></div>
+                                <div className="product-img" style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/images/product/${product.product_img}')` }}></div>
                                 <div className="product-title">{product.product_name}</div>
                                 <div className="product-price">{product.product_price}</div>
                             </Link>
@@ -50,11 +39,11 @@ export default function App() {
                     modules={[Navigation]}
                     className="mySwiper">
                     {
-                        productDataList.map((product, productIndex) =>
+                        Array.isArray(productList) && productList.map((product, productIndex) =>
                             <SwiperSlide key={productIndex}>
                                 <div className="flex justify-center" key={product.product_id + productIndex}>
                                     <Link className="product-card" href={`/Product/Detail/${product.product_id}`}>
-                                        <div className="product-img" style={{ backgroundImage: `url('http://localhost:3010/cat-tree.jpg')` }}></div>
+                                        <div className="product-img" style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/images/product/${product.product_img}')` }}></div>
                                         <div className="product-title">{product.product_name}</div>
                                         <div className="product-price">{product.product_price}</div>
                                     </Link>

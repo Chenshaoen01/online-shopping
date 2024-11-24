@@ -51,7 +51,7 @@ export default ({ csrfToken }) => {
             <div className="navbar-options-area">
                 <div className="navbar-options-front-area">
                     <Link className="me-4 navbar-option" href="/About">關於我們</Link>
-                    <Link className="me-4 navbar-option" href="/Product/List">商品列表</Link>
+                    <Link className="me-4 navbar-option" href="/Product/List/All">商品列表</Link>
                     <Link className="me-4 navbar-option" href="/FAQ">常見問答</Link>
                 </div>
                 <div className="navbar-options-back-area">

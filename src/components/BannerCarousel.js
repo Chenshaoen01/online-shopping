@@ -8,12 +8,8 @@ import 'swiper/css/navigation';
 
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
-export default function App() {
-    const [bannerImageList] = useState([
-        "/banner-01.png",
-        "/banner-02.png",
-        "/banner-03.png"
-    ]);
+export default function App({bannerSourceList}) {
+    const [bannerImageList] = useState(bannerSourceList);
 
     return (
         <>
@@ -34,7 +30,9 @@ export default function App() {
                 {
                     bannerImageList.map((image, imageIndex) =>
                         <SwiperSlide key={imageIndex}>
-                            <div className="homepage-carousel-item" style={{ backgroundImage: `url('${image}')` }}></div>
+                            <a target="_blank" href={image.banner_link}
+                                 className="homepage-carousel-item"
+                                 style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/images/banner/${image.banner_img}')` }}></a>
                         </SwiperSlide>
                     )
                 }

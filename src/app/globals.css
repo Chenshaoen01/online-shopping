@@ -272,6 +272,7 @@ body {
 
 /* 首頁輪播 */
 .homepage-carousel-item {
+  display: block;
   width: 100%;
   aspect-ratio: 3/1;
   background-position: center;

@@ -2,16 +2,16 @@
 import { useEffect, useState } from "react"
 import MicroModal from 'micromodal';
 
-export default ({ params }) => {
+export default ({ productSubImgList }) => {
     const [mainImgIndex, setMainImgIndex] = useState(0)
-    const productSubImgList = [
-        "http://localhost:3010/faq-cat1.png",
-        "http://localhost:3010/faq-cat2.png",
-        "http://localhost:3010/faq-cat3.png",
-        "http://localhost:3010/faq-dog1.png",
-        "http://localhost:3010/faq-dog2.png",
-        "http://localhost:3010/faq-dog3.png",
-    ]
+    // const productSubImgList = [
+    //     "http://localhost:3010/faq-cat1.png",
+    //     "http://localhost:3010/faq-cat2.png",
+    //     "http://localhost:3010/faq-cat3.png",
+    //     "http://localhost:3010/faq-dog1.png",
+    //     "http://localhost:3010/faq-dog2.png",
+    //     "http://localhost:3010/faq-dog3.png",
+    // ]
 
     function subImgOnclick(action) {
         console.log(action)
@@ -35,7 +35,7 @@ export default ({ params }) => {
         <div className="product-detail-img-area mb-8">
             <div className="product-detail-main-img"
                 onClick={() => MicroModal.show("modal-1")}
-                style={{ backgroundImage: `url('${productSubImgList[mainImgIndex]}')` }}
+                style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/images/product/${productSubImgList[mainImgIndex]}')` }}
                 data-fancybox></div>
             <div className="product-sub-img-area-container mt-4">
                 <button className="product-sub-img-switch-button product-sub-img-switch-button-prev" type="button"
@@ -50,7 +50,7 @@ export default ({ params }) => {
                     {
                         productSubImgList.map((subImg, subImgIndex) =>
                             <div className={subImgClassName(subImgIndex)} key={subImgIndex}
-                                style={{ backgroundImage: `url('${subImg}')` }}
+                                style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/images/product/${subImg}')` }}
                                 onClick={() => { setMainImgIndex(subImgIndex) }}>
                             </div>
                         )
