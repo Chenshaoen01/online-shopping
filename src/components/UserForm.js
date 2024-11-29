@@ -9,7 +9,6 @@ export default function Login({ pageType }) {
     const passwordRef = useRef();
 
     const handleRegister = async () => {
-        console.log('註冊')
     }
 
     const handleLogin = async () => {
@@ -35,11 +34,9 @@ export default function Login({ pageType }) {
             const data = await response.json();
             document.cookie = `csrfToken=${data.csrfToken}; path=/`; // 存儲 CSRF token
             setError(null); // 清除錯誤訊息
-            console.log('登入成功');
             router.push("/")
         } catch (error) {
             console.log(error)
-            setError('發生錯誤，請稍後再試');
         }
     };
 

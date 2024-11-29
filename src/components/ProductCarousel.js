@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import ProductCard from "@/components/ProductCard";
 
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -14,13 +15,7 @@ export default function App({productList}) {
             <div className="hidden lg:grid lg:grid-cols-4 gap-y-4 mt-8 mb-32">
                 {
                     Array.isArray(productList) && productList.map((product, productIndex) =>
-                        <div className="flex justify-center" key={product.product_id + productIndex}>
-                            <Link className="product-card" href={`/Product/Detail/${product.product_id}`}>
-                                <div className="product-img" style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/images/product/${product.product_img}')` }}></div>
-                                <div className="product-title">{product.product_name}</div>
-                                <div className="product-price">{product.product_price}</div>
-                            </Link>
-                        </div>
+                       <ProductCard product={product}  key={product.product_id + productIndex}/>
                     )
                 }
             </div>
@@ -41,13 +36,7 @@ export default function App({productList}) {
                     {
                         Array.isArray(productList) && productList.map((product, productIndex) =>
                             <SwiperSlide key={productIndex}>
-                                <div className="flex justify-center" key={product.product_id + productIndex}>
-                                    <Link className="product-card" href={`/Product/Detail/${product.product_id}`}>
-                                        <div className="product-img" style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/images/product/${product.product_img}')` }}></div>
-                                        <div className="product-title">{product.product_name}</div>
-                                        <div className="product-price">{product.product_price}</div>
-                                    </Link>
-                                </div>
+                                <ProductCard product={product}  key={product.product_id + productIndex}/>
                             </SwiperSlide>
                         )
                     }

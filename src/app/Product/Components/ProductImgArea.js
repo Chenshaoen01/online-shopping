@@ -4,17 +4,8 @@ import MicroModal from 'micromodal';
 
 export default ({ productSubImgList }) => {
     const [mainImgIndex, setMainImgIndex] = useState(0)
-    // const productSubImgList = [
-    //     "http://localhost:3010/faq-cat1.png",
-    //     "http://localhost:3010/faq-cat2.png",
-    //     "http://localhost:3010/faq-cat3.png",
-    //     "http://localhost:3010/faq-dog1.png",
-    //     "http://localhost:3010/faq-dog2.png",
-    //     "http://localhost:3010/faq-dog3.png",
-    // ]
 
     function subImgOnclick(action) {
-        console.log(action)
         if (action === 'prev' && mainImgIndex !== 0) {
             setMainImgIndex(mainImgIndex - 1)
         } else if (action === 'next' && mainImgIndex !== productSubImgList.length - 1) {

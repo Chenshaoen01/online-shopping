@@ -26,7 +26,7 @@ body {
   color: var(--primary);
   font-family: Arial, Helvetica, sans-serif;
   background-image: url('/primary-body-background.png');
-  background-size: cover;
+  background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: top;
 }
@@ -348,6 +348,35 @@ body {
   background-repeat: repeat;
 }
 
+.page-button {
+  width: 25px;
+  height: 25px;
+  margin: 0 0.25rem;
+  text-align: center;
+  border: solid 1px black;
+  color: black;
+}
+
+.page-button.active {
+  background-color: #C9A27F;
+  color: white;
+}
+
+.page-button-dots:before {
+  content: "...";
+  display: block;
+  line-height: 25px;
+  margin: 0 0.25rem 0.5rem 0.25rem;
+}
+
+.page-button-pre:before {
+  content: "<";
+}
+
+.page-button-next:before {
+  content: ">";
+}
+
 /* 商品詳細資訊頁面 */
 .product-detail-img-area {
   width: 40vw;
@@ -655,6 +684,15 @@ body {
 .swiper-button-prev:after,
 .swiper-button-next:after {
   font-size: 1.25rem !important;
+}
+
+/* 關於我們 */
+.about-us-content {
+  font-size: 1.25rem;
+  line-height: 2rem;
+  font-weight: 500;
+  text-align: center;
+  white-space: pre-line;
 }
 
 /* 通用樣式 */

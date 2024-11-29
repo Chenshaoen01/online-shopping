@@ -25,11 +25,13 @@ export default async function Home() {
     }
   ]
 
-  const currentDate = new Date
-  const recommendedProducts = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/getRecommendedProducts?date=${currentDate.toString()}`).then(res => res.json())
-  console.log(recommendedProducts)
-  const bannerList = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/banner/getAll`).then(res => res.json())
-  const questionList = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/question/getTopThree`).then(res => res.json())
+
+  const recommendedProducts = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/getRecommendedProducts`, { cache:"no-cache" }).then(res => res.json())
+
+  const bannerList = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/banner/getAll`, { cache:"no-cache" })
+      .then(res => res.json())
+  const questionList = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/question/getTopThree`, { cache:"no-cache" })
+      .then(res => res.json())
 
   return <>
     <Navbar></Navbar>

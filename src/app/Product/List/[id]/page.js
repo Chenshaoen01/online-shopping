@@ -1,5 +1,6 @@
 import Link from "next/link"
 import Navbar from "@/components/Navbar";
+import ProductListClient from "@/components/ProductListClient";
 
 export default async ({ params }) => {
     const urlQuery = params.id === "All"? "page=1" : `category_id=${params.id}&page=1`
@@ -10,7 +11,8 @@ export default async ({ params }) => {
 
     return <>
         <Navbar></Navbar>
-        <div className="main-content-area">
+        <ProductListClient categoryId={params.id}></ProductListClient>
+        {/* <div className="main-content-area">
             <div className="custom-container">
                 <div className="section-title my-8">商品列表</div>
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4">
@@ -27,6 +29,6 @@ export default async ({ params }) => {
                     }
                 </div>
             </div>
-        </div>
+        </div> */}
     </>
 }

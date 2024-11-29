@@ -39,7 +39,7 @@ export default ({ csrfToken }) => {
     };
 
     return <div className={isMobileNavbarExpanded ? "navbar-area-container active" : "navbar-area-container"}
-        onClick={() => { console.log("外層點擊事件"); setIsMobileNavbarExpanded(false); }}>
+        onClick={() => { setIsMobileNavbarExpanded(false); }}>
         <div className="navbar-area justify-between"
             onClick={(e) => { e.stopPropagation(); }}>
             <Link className="mx-4 flex items-center" href="/">

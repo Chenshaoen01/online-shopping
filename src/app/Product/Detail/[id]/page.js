@@ -3,12 +3,11 @@ import ProductCarousel from "@/components/ProductCarousel"
 import ProductImgArea from "../../Components/ProductImgArea";
 
 export default async ({ params }) => {
-    const productData = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/${params.id}`).then(res => res.json())
+    const currentDate = new Date
+    const productData = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/${params.id}?date=${currentDate.toDateString()}`, { cache: "no-cache" }).then(res => res.json())
     const productSubImgList = Array.isArray(productData.images) ? productData.images.map(productImage => productImage.product_img) : []
-    console.log("productData.images", productData.images)
-    console.log("productSubImgList", productSubImgList)
 
-    const relatedProductData = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/related/${params.id}`).then(res => res.json())
+    const relatedProductData = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/related/${params.id}`, { cache: "no-cache" }).then(res => res.json())
 
     return <>
         <Navbar></Navbar>
@@ -46,8 +45,12 @@ export default async ({ params }) => {
                 <div className="product-info mb-8">
                     {productData?.product_info}
                 </div>
-                <div className="section-title mb-4">推薦商品</div>
-                <ProductCarousel productList={relatedProductData}></ProductCarousel>
+                {
+                    (Array.isArray(relatedProductData) && relatedProductData.length > 0) && <>
+                        <div className="section-title mb-4">推薦商品</div>
+                        <ProductCarousel productList={relatedProductData}></ProductCarousel>
+                    </>
+                }
             </div>
         </div>
     </>

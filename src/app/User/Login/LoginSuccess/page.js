@@ -8,7 +8,6 @@ export default function () {
             // 直接前端去向 google API 取回使用者資訊
             const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`)
             .then((res) => res.json())
-            console.log('response', response)
         } catch (error) {
             console.log(error)
         }
