@@ -1,8 +1,10 @@
 "use client"
 import Link from "next/link"
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react"
 
 export default ({ csrfToken }) => {
+    const router = useRouter()
     const [isLogIn] = useState(csrfToken !== undefined)
     const [isMobileNavbarExpanded, setIsMobileNavbarExpanded] = useState(false)
     const [cartData, setCartData] = useState({})
@@ -31,7 +33,7 @@ export default ({ csrfToken }) => {
             .then(res => {
                 if (res.ok) {
                     document.cookie = 'csrfToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
-                    window.location.href = '/User/Login';
+                    router.push("/User/Login")
                 } else {
                     console.error('登出失敗');
                 }
@@ -56,7 +58,7 @@ export default ({ csrfToken }) => {
                 </div>
                 <div className="navbar-options-back-area">
                     {
-                        cartData?.cart_items?.length > 0 ? <div className="me-4 navbar-option">購物車({cartData?.cart_items?.length})</div> : null
+                        Array.isArray(cartData?.cart_items) ? <div className="me-4 navbar-option">購物車({cartData?.cart_items?.length})</div> : null
                     }
                     {isLogIn && <button className="me-4 navbar-option" type="button" onClick={logOut}>登出</button>}
                     {!isLogIn && <>
