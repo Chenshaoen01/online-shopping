@@ -4,6 +4,7 @@ import NavbarClinet from "./NavbarClinet.js"
 
 export default async () => {
     const cookieStore = await cookies()
-    const csrfToken = cookieStore.get('csrfToken')
-    return <NavbarClinet csrfToken={csrfToken?.value}></NavbarClinet>
+    const jwtToken = cookieStore.get('jwt')
+    const isLogIn = jwtToken !== undefined
+    return <NavbarClinet isLogIn={isLogIn}></NavbarClinet>
 }

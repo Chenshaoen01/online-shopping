@@ -2,15 +2,19 @@ import Navbar from "@/components/Navbar";
 import FAQComponent from "@/components/FAQComponent";
 
 export default async () => {
-    const questionList = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/question/getAll`, { cache:"no-cache" })
-                               .then(res => res.json())
+    const questionList = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/question/getAll`, { cache: "no-cache" })
+        .then(res => res.json())
 
     return <>
         <Navbar></Navbar>
         <div className="main-content-area">
             <div className="custom-container">
                 <div className="section-title my-8">問題列表</div>
-                <FAQComponent questionSourceList={questionList}></FAQComponent>
+                {
+                    (Array.isArray(questionList) && questionList.length > 0) ? (
+                        <FAQComponent questionSourceList={questionList}></FAQComponent>
+                    ) : <p className="text-center mt-16 text-xl">尚無常見問答</p>
+                }
             </div>
         </div>
     </>

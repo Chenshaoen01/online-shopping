@@ -1,5 +1,5 @@
 import Navbar from '@/components/Navbar';
-import UserForm from '@/components/UserForm'
+import UserForm from '../Components/UserForm'
 
 export default function Login() {
     return (

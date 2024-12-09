@@ -1,17 +1,9 @@
 'use client'
 import { useEffect } from "react"
-import Navbar from "@/components/Navbar"
+import { useRouter } from 'next/navigation';
 
 export default function () {
-    async function fetchGoogleUserInfo(access_token) {
-        try {
-            // 直接前端去向 google API 取回使用者資訊
-            const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`)
-            .then((res) => res.json())
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    const router = useRouter()
 
     useEffect(() => {
         const table = {}
@@ -20,13 +12,32 @@ export default function () {
             table[key] = value
         })
 
-        // 使用回傳參數 access_token，去向 google API 取回使用者資訊
-        fetchGoogleUserInfo(table.access_token)
+        if(table.access_token !== null) {
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/googleLogin`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({ access_token: table.access_token }),
+            })
+            .then(res => res.json())
+            .then((res) => {
+                if(res.csrfToken) {
+                    document.cookie = `csrfToken=${res.csrfToken}; path=/`;
+                }
+                router.push('/')
+            });
+        } else {
+            setTimeout(() => {
+                router.push('/')
+            }, 3000)
+        }
     }, [])
     return <>
-        <Navbar></Navbar>
-        <div className="main-content-area">
-            <h1>登入成功</h1>
+        <div className="primary-color-background flex flex-col justify-center items-center">
+            <img className="primary-color-background-img me-2" src="/logo1.png"></img>
+            <p className="text-3xl font-bold mt-8">登入成功</p>
         </div>
     </>
 }

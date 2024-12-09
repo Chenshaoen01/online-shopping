@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import alertify from 'alertifyjs';
+import { LoadingPage, LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
 
 export default function Login({ pageType }) {
     const router = useRouter();
@@ -15,13 +16,13 @@ export default function Login({ pageType }) {
         const isRemember = localStorage.getItem("isRemember")
         const userEmail = localStorage.getItem("userEmail")
 
-        if(isRemember === "true") {
+        if (isRemember === "true" && pageType === "Login") {
             setIsRemember(true)
             setEmail(userEmail)
         }
     }, [])
 
-    // 驗證
+    // 表單驗證
     const RequiredColvalidate = () => {
         const validateColumn = pageType === "Register" ? [
             { columnState: name, columnChName: "使用者名稱" },
@@ -49,6 +50,7 @@ export default function Login({ pageType }) {
         return email !== "" && email !== null && email !== undefined && !emailregex.test(email) ? "電子信箱格式不符" : ""
     }
 
+    // 註冊
     const handleRegister = async () => {
         const rquiredInvalidColumnList = RequiredColvalidate();
         const emailRegexInvalidString = emailRegexValidate()
@@ -64,6 +66,7 @@ export default function Login({ pageType }) {
             alertify.alert("", inValidString);
         } else {
             try {
+                LoadingPageShow()
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, {
                     method: 'POST',
                     headers: {
@@ -72,6 +75,7 @@ export default function Login({ pageType }) {
                     body: JSON.stringify({ user_name: name, user_email: email, user_tel: tel, user_password: password }),
                     credentials: 'include', // 讓 Cookie 隨請求發送
                 });
+                LoadingPageHide()
 
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -84,11 +88,13 @@ export default function Login({ pageType }) {
                     router.push("/User/Login");
                 }, 2000)
             } catch (error) {
+                LoadingPageHide()
                 console.error(error);
             }
         }
     };
 
+    // 登入
     const handleLogin = async () => {
         const inValidColumnList = RequiredColvalidate();
         if (inValidColumnList.length > 0) {
@@ -96,6 +102,7 @@ export default function Login({ pageType }) {
             alertify.alert("", `${inValidString}為必填項目`);
         } else {
             try {
+                LoadingPageShow()
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
                     method: 'POST',
                     headers: {
@@ -104,6 +111,7 @@ export default function Login({ pageType }) {
                     body: JSON.stringify({ user_email: email, user_password: password }),
                     credentials: 'include', // 讓 Cookie 隨請求發送
                 });
+                LoadingPageHide()
 
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -115,27 +123,28 @@ export default function Login({ pageType }) {
                 document.cookie = `csrfToken=${data.csrfToken}; path=/`;
 
                 handleLocalStorageData()
-                alertify.alert("", "登入成功");
                 setTimeout(() => {
-                    router.push("/");
+                    router.push("/User/Login/LoginSuccess");
                 }, 2000)
             } catch (error) {
+                LoadingPageHide()
                 console.error(error);
             }
         }
     };
 
     // 登入後儲存/移除 LocalStorage 的使用者登入資料
-    function handleLocalStorageData () {
-        if(isRemember) {
+    function handleLocalStorageData() {
+        if (isRemember) {
             localStorage.setItem("isRemember", true)
             localStorage.setItem("userEmail", email)
         } else {
             localStorage.setItem("isRemember", false)
             localStorage.setItem("userEmail", "")
         }
-    } 
+    }
 
+    // google 登入
     function googleLogIn() {
         var oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
         var form = document.createElement('form');
@@ -146,7 +155,7 @@ export default function Login({ pageType }) {
             'client_id': '1071950848439-q4vqij748t7qlrvu4uaeunr4pis5mm48.apps.googleusercontent.com',
             'redirect_uri': 'http://localhost:3010/User/Login/LoginSuccess',
             'response_type': 'token',
-            'scope': 'https://www.googleapis.com/auth/userinfo.email',
+            'scope': 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
             'include_granted_scopes': 'true',
             'state': 'pass-through value',
         };
@@ -165,6 +174,7 @@ export default function Login({ pageType }) {
 
     return (
         <>
+            <LoadingPage></LoadingPage>
             <div className="userpage-main-content-area">
                 <div className="grid grid-cols-12">
                     <div className="col-span-7 hidden md:flex">
@@ -220,11 +230,15 @@ export default function Login({ pageType }) {
                                         className="userpage-form-input"
                                     />
                                 </label>
-                                <label className="w-full flex mb-4">
-                                    <input type="checkbox" checked={isRemember} onChange={(e) => setIsRemember(e.target.checked)} className="me-2"
-                                    />
-                                    <span>記住電子信箱</span>
-                                </label>
+                                {
+                                    pageType === "Login" && <>
+                                        <label className="w-full flex mb-4">
+                                            <input type="checkbox" checked={isRemember} onChange={(e) => setIsRemember(e.target.checked)} className="me-2"
+                                            />
+                                            <span>記住電子信箱</span>
+                                        </label>
+                                    </>
+                                }
                                 {pageType === "Login" && (
                                     <>
                                         <button type="button" onClick={handleLogin} className="userpage-form-button mb-2">

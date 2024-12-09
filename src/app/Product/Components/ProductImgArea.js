@@ -26,32 +26,34 @@ export default ({ productSubImgList }) => {
         <div className="product-detail-img-area mb-8">
             <div className="product-detail-main-img"
                 onClick={() => MicroModal.show("modal-1")}
-                style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/images/product/${productSubImgList[mainImgIndex]}')` }}
-                data-fancybox></div>
-            <div className="product-sub-img-area-container mt-4">
-                <button className="product-sub-img-switch-button product-sub-img-switch-button-prev" type="button"
-                    onClick={() => { subImgOnclick('prev') }}>
-                    <img className="product-sub-img-switch-icon" src="/angle-left.svg"></img>
-                </button>
-                <button className="product-sub-img-switch-button  product-sub-img-switch-button-next" type="button"
-                    onClick={() => { subImgOnclick('next') }}>
-                    <img className="product-sub-img-switch-icon" src="/angle-right.svg"></img>
-                </button>
-                <div className="product-sub-img-area">
-                    {
-                        productSubImgList.map((subImg, subImgIndex) =>
-                            <div className={subImgClassName(subImgIndex)} key={subImgIndex}
-                                style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/images/product/${subImg}')` }}
-                                onClick={() => { setMainImgIndex(subImgIndex) }}>
-                            </div>
-                        )
-                    }
-                </div>
+                style={{ backgroundImage: (productSubImgList[mainImgIndex] === "" || productSubImgList[mainImgIndex] === null || productSubImgList[mainImgIndex] === undefined) ? `url('/no-image.png')` : `url('${process.env.NEXT_PUBLIC_API_URL}/images/product/${productSubImgList[mainImgIndex]}')` }}
+                data-fancybox>
             </div>
+            {
+                (Array.isArray(productSubImgList) && productSubImgList.length > 0) && <div className="product-sub-img-area-container mt-4">
+                    <button className="product-sub-img-switch-button product-sub-img-switch-button-prev" type="button"
+                        onClick={() => { subImgOnclick('prev') }}>
+                        <img className="product-sub-img-switch-icon" src="/angle-left.svg"></img>
+                    </button>
+                    <button className="product-sub-img-switch-button  product-sub-img-switch-button-next" type="button"
+                        onClick={() => { subImgOnclick('next') }}>
+                        <img className="product-sub-img-switch-icon" src="/angle-right.svg"></img>
+                    </button>
+                    <div className="product-sub-img-area">
+                        {
+                            productSubImgList.map((subImg, subImgIndex) =>
+                                <div className={subImgClassName(subImgIndex)} key={subImgIndex}
+                                    style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/images/product/${subImg}')` }}
+                                    onClick={() => { setMainImgIndex(subImgIndex) }}>
+                                </div>
+                            )
+                        }
+                    </div>
+                </div>
+            }
         </div>
 
-
-        <div className="modal micromodal-slide product-img-modal" id="modal-1" aria-hidden="true">
+        <div className="modal micromodal-slide product-img-modal mt-8" id="modal-1" aria-hidden="true">
             <div className="modal__overlay" data-micromodal-close>
                 <div className="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
                     <main className="modal__content" id="modal-1-content">
