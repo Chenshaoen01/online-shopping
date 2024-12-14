@@ -22,7 +22,12 @@ export default ({ isLogIn }) => {
                 'X-CSRF-Token': document.cookie.split('; ').find(row => row.startsWith('csrfToken='))?.split('=')[1]
             }
         })
-            .then(res => res.json())
+            .then(res => {
+                if(!res.ok) {
+                    return new Promise.reject(new Error())
+                }
+                return res.json()
+            })
             .then(res => {
                 setCartData(res)
                 setTimeout(() => {

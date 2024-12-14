@@ -13,8 +13,8 @@ export default function Login({ pageType }) {
     const [isRemember, setIsRemember] = useState(false);
 
     useEffect(() => {
-        const isRemember = localStorage.getItem("isRemember")
-        const userEmail = localStorage.getItem("userEmail")
+        const isRemember = localStorage.getItem("isPetShoppingRemember")
+        const userEmail = localStorage.getItem("petShoppingUserEmail")
 
         if (isRemember === "true" && pageType === "Login") {
             setIsRemember(true)
@@ -119,9 +119,6 @@ export default function Login({ pageType }) {
                     return;
                 }
 
-                const data = await response.json();
-                document.cookie = `csrfToken=${data.csrfToken}; path=/`;
-
                 handleLocalStorageData()
                 setTimeout(() => {
                     router.push("/User/Login/LoginSuccess");
@@ -136,11 +133,11 @@ export default function Login({ pageType }) {
     // 登入後儲存/移除 LocalStorage 的使用者登入資料
     function handleLocalStorageData() {
         if (isRemember) {
-            localStorage.setItem("isRemember", true)
-            localStorage.setItem("userEmail", email)
+            localStorage.setItem("isPetShoppingRemember", true)
+            localStorage.setItem("petShoppingUserEmail", email)
         } else {
-            localStorage.setItem("isRemember", false)
-            localStorage.setItem("userEmail", "")
+            localStorage.setItem("isPetShoppingRemember", false)
+            localStorage.setItem("petShoppingUserEmail", "")
         }
     }
 
