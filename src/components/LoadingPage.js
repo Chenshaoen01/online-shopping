@@ -11,6 +11,5 @@ export const LoadingPageShow = () => {
 }
 
 export const LoadingPageHide = () => {
-    console.log(document.getElementById('loading-page'))
     document.getElementById('loading-page').style.display = "none"
 }
