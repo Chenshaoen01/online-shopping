@@ -6,13 +6,14 @@ export default function () {
     const router = useRouter()
 
     useEffect(() => {
-        const table = {}
-        window.location.href.split('&').forEach((pair) => {
-            const [key, value] = pair.split('=')
-            table[key] = value
-        })
+        const hasAccessToken = window.location.href.includes('access_token')
+        if(hasAccessToken) {
+            const table = {}
+            window.location.href.split('&').forEach((pair) => {
+                const [key, value] = pair.split('=')
+                table[key] = value
+            })
 
-        if(table.access_token !== null) {
             fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/googleLogin`, {
                 method: 'POST',
                 headers: {
@@ -31,7 +32,7 @@ export default function () {
         } else {
             setTimeout(() => {
                 router.push('/')
-            }, 3000)
+            }, 2000)
         }
     }, [])
     return <>

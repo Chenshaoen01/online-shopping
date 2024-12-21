@@ -1,7 +1,7 @@
 export const LoadingPage = () => {
     return <>
         <div id="loading-page" className="loading-page">
-            <div class="loader"></div>
+            <div className="loader"></div>
         </div>
     </>
 }

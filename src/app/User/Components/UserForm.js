@@ -89,7 +89,6 @@ export default function Login({ pageType }) {
                 }, 2000)
             } catch (error) {
                 LoadingPageHide()
-                console.error(error);
             }
         }
     };

@@ -19,7 +19,7 @@ export default async function Home() {
     },
     {
       category_id: "other",
-      category_img: '/cat-tree.jpg',
+      category_img: '/cat-tree.png',
       category_name: "其他好物",
       category_en_name: "Others",
     }
