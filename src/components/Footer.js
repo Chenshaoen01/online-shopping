@@ -1,6 +1,3 @@
-"use client"
-import { useEffect, useState } from "react"
-
 export default () => {
     return <div className="footer">
         <div className="flex">

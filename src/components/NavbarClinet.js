@@ -8,7 +8,7 @@ export default ({ isLogIn }) => {
     const [isMobileNavbarExpanded, setIsMobileNavbarExpanded] = useState(false)
     const [cartData, setCartData] = useState({})
     useEffect(() => {
-        if (isLogIn) {
+        if (isLogIn && typeof window !== undefined) {
             getUserCart()
         }
     }, [])

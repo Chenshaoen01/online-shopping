@@ -1,32 +1,37 @@
 'use client'
-import { useState, useEffect, useMemo } from "react"
-import alertify from "alertifyjs"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
+let alertify;
 
 export default () => {
     const [cartData, setCartData] = useState([])
     useEffect(() => {
-        updateCartData()
+        if(typeof window !== undefined) { 
+            alertify = requeire("alertifyjs") 
+            updateCartData()   
+        }
     }, [])
 
-    const updateCartData = () => {
+    const updateCartData = useCallback(() => {
         LoadingPageShow()
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': document.cookie.split('; ').find(row => row.startsWith('csrfToken='))?.split('=')[1]
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                LoadingPageHide()
-                if (res.cart_items) {
-                    setCartData(res.cart_items)
+        if(typeof window !== undefined) {
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': document.cookie.split('; ').find(row => row.startsWith('csrfToken='))?.split('=')[1]
                 }
             })
-    }
+                .then(res => res.json())
+                .then(res => {
+                    LoadingPageHide()
+                    if (res.cart_items) {
+                        setCartData(res.cart_items)
+                    }
+                })
+        }
+    }, [])
 
     const deleteConfirm = (deleteCartItemId) => {
         alertify.confirm(
@@ -43,19 +48,21 @@ export default () => {
 
     const deleteCartItem = (deleteCartItemId) => {
         LoadingPageShow()
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/items/${deleteCartItemId}`, {
-            method: 'DELETE',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': document.cookie.split('; ').find(row => row.startsWith('csrfToken='))?.split('=')[1]
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                LoadingPageHide()
-                updateCartData()
+        if(typeof window !== undefined) {
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/items/${deleteCartItemId}`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': document.cookie.split('; ').find(row => row.startsWith('csrfToken='))?.split('=')[1]
+                }
             })
+                .then(res => res.json())
+                .then(res => {
+                    LoadingPageHide()
+                    updateCartData()
+                })
+        }
     }
 
     const cartTotalPrice = useMemo(() => {
