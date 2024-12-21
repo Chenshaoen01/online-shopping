@@ -7,19 +7,19 @@ export default async function Home() {
   const categoryDataList = [
     {
       category_id: "food",
-      category_img: 'http://localhost:3010/dog-food.png',
+      category_img: '/dog-food.png',
       category_name: "找飼料",
       category_en_name: "Food",
     },
     {
       category_id: "toy",
-      category_img: 'http://localhost:3010/pet-toy.png',
+      category_img: '/pet-toy.png',
       category_name: "找玩具",
       category_en_name: "Toys",
     },
     {
       category_id: "other",
-      category_img: 'http://localhost:3010/cat-tree.jpg',
+      category_img: '/cat-tree.jpg',
       category_name: "其他好物",
       category_en_name: "Others",
     }

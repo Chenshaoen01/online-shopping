@@ -150,7 +150,7 @@ export default function Login({ pageType }) {
 
         var params = {
             'client_id': '1071950848439-q4vqij748t7qlrvu4uaeunr4pis5mm48.apps.googleusercontent.com',
-            'redirect_uri': 'http://localhost:3010/User/Login/LoginSuccess',
+            'redirect_uri': `${window.location.origin}/User/Login/LoginSuccess`,
             'response_type': 'token',
             'scope': 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
             'include_granted_scopes': 'true',
