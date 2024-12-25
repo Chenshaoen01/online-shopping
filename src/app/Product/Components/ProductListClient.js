@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import ProductCard from "@/components/ProductCard.js";
 import PageButtonGroup from "@/components/PageButtonGroup.js";
 import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
@@ -18,7 +18,7 @@ export default ({ categoryId }) => {
         getDataList()
     }, [currentPage])
 
-    const getDataList = async () => {
+    const getDataList = useCallback(async () => {
         setIsLoading(true)
         const urlQuery = categoryId === "All" ? `page=${currentPage}` : `category_id=${categoryId}&page=${currentPage}`
 
@@ -42,7 +42,7 @@ export default ({ categoryId }) => {
                 LoadingPageHide()
                 setIsLoading(false)
             })
-    }
+    }, [currentPage]) 
 
     return <>
         <div className="main-content-area">

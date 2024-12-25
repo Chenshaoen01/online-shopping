@@ -413,6 +413,7 @@ body {
   background-position: center;
   background-size: cover;
   background-repeat: repeat;
+  cursor: pointer;
 }
 
 .product-sub-img-area-container {

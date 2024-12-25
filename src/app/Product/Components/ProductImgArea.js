@@ -1,22 +1,22 @@
 'use client'
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import MicroModal from 'micromodal';
 
 export default ({ productSubImgList }) => {
     const [mainImgIndex, setMainImgIndex] = useState(0)
 
-    function subImgOnclick(action) {
+    const subImgOnclick = useCallback((action) => {
         if (action === 'prev' && mainImgIndex !== 0) {
             setMainImgIndex(mainImgIndex - 1)
         } else if (action === 'next' && mainImgIndex !== productSubImgList.length - 1) {
             setMainImgIndex(mainImgIndex + 1)
         }
-    }
+    }, [mainImgIndex, productSubImgList])
 
-    function subImgClassName(imgIndex) {
+    const subImgClassName = useCallback((imgIndex) => {
         const basicClassName = "product-sub-img"
-        return mainImgIndex > imgIndex && imgIndex < 3 ? "hidden" : basicClassName
-    }
+        return ((mainImgIndex > imgIndex) && imgIndex < 3 && productSubImgList.length > 3) ? "hidden" : basicClassName
+    }, [mainImgIndex, productSubImgList])
 
     useEffect(() => {
         MicroModal.init();
@@ -60,7 +60,7 @@ export default ({ productSubImgList }) => {
                         <div className="flex modal__close-area">
                             <button className="modal__close" aria-label="Close modal" data-micromodal-close>X</button>
                         </div>
-                        <img className="product-modal-img" src={productSubImgList[mainImgIndex]}></img>
+                        <img className="product-modal-img" src={`${process.env.NEXT_PUBLIC_API_URL}/images/product/${productSubImgList[mainImgIndex]}`}></img>
                     </main>
                 </div>
             </div>

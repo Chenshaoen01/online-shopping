@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import alertify from 'alertifyjs';
 import { LoadingPage, LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
@@ -23,7 +23,7 @@ export default function Login({ pageType }) {
     }, [])
 
     // 表單驗證
-    const RequiredColvalidate = () => {
+    const RequiredColvalidate = useCallback(() => {
         const validateColumn = pageType === "Register" ? [
             { columnState: name, columnChName: "使用者名稱" },
             { columnState: email, columnChName: "電子信箱" },
@@ -43,15 +43,15 @@ export default function Login({ pageType }) {
         }, [])
 
         return inValidColumnList
-    }
+    }, [name, email, tel, password, email, password])
 
-    const emailRegexValidate = () => {
+    const emailRegexValidate = useCallback(() => {
         const emailregex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return email !== "" && email !== null && email !== undefined && !emailregex.test(email) ? "電子信箱格式不符" : ""
-    }
+    }, [email])
 
     // 註冊
-    const handleRegister = async () => {
+    const handleRegister = useCallback(async () => {
         const rquiredInvalidColumnList = RequiredColvalidate();
         const emailRegexInvalidString = emailRegexValidate()
         if (rquiredInvalidColumnList.length > 0 || emailRegexInvalidString !== "") {
@@ -91,10 +91,10 @@ export default function Login({ pageType }) {
                 LoadingPageHide()
             }
         }
-    };
+    }, [name, email, tel, password])
 
     // 登入
-    const handleLogin = async () => {
+    const handleLogin = useCallback(async () => {
         const inValidColumnList = RequiredColvalidate();
         if (inValidColumnList.length > 0) {
             const inValidString = inValidColumnList.join("、");
@@ -127,10 +127,10 @@ export default function Login({ pageType }) {
                 console.error(error);
             }
         }
-    };
+    }, [email, password])
 
     // 登入後儲存/移除 LocalStorage 的使用者登入資料
-    function handleLocalStorageData() {
+    const handleLocalStorageData = useCallback(() => {
         if (isRemember) {
             localStorage.setItem("isPetShoppingRemember", true)
             localStorage.setItem("petShoppingUserEmail", email)
@@ -138,10 +138,10 @@ export default function Login({ pageType }) {
             localStorage.setItem("isPetShoppingRemember", false)
             localStorage.setItem("petShoppingUserEmail", "")
         }
-    }
+    }, [isRemember, email])
 
     // google 登入
-    function googleLogIn() {
+    const googleLogIn = useCallback(() => {
         var oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
         var form = document.createElement('form');
         form.setAttribute('method', 'GET');
@@ -166,7 +166,7 @@ export default function Login({ pageType }) {
 
         document.body.appendChild(form);
         form.submit();
-    }
+    }, [])
 
     return (
         <>

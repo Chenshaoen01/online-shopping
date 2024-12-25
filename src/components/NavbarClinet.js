@@ -1,7 +1,7 @@
 "use client"
 import Link from "next/link"
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from "react"
+import { useRouter } from 'next/navigation'
+import { useEffect, useState, useCallback } from "react"
 
 export default ({ isLogIn }) => {
     const router = useRouter()
@@ -13,7 +13,7 @@ export default ({ isLogIn }) => {
         }
     }, [])
 
-    const getUserCart = () => {
+    const getUserCart = useCallback(() => {
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/`, {
             method: 'POST',
             credentials: 'include',
@@ -37,9 +37,9 @@ export default ({ isLogIn }) => {
             .catch((err) => {
                 console.log(err)
             })
-    }
+    }, []) 
 
-    const logOut = () => {
+    const logOut = useCallback(() => {
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, {
             method: 'POST',
             credentials: 'include', // 包含 cookies
@@ -51,7 +51,7 @@ export default ({ isLogIn }) => {
                     console.error('登出失敗');
                 }
             })
-    };
+    }, [])
 
     return <div className={isMobileNavbarExpanded ? "navbar-area-container active" : "navbar-area-container"}
         onClick={() => { setIsMobileNavbarExpanded(false); }}>

@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import alertify from "alertifyjs"
 import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
 
@@ -9,7 +9,7 @@ export default ({ productData, isLogin }) => {
     const [selectedProductPrice, setSelectedProductPrice] = useState(productData?.product_price)
 
     // 價格更新：檢查數量是否大於1
-    const handleQuantityOnChange = (newQuantity) => {
+    const handleQuantityOnChange = useCallback((newQuantity) => {
         const newQuantityParseFloat = parseFloat(newQuantity)
         if (parseFloat(newQuantityParseFloat) < 1) {
             alertify.alert("", "商品數量須大於 1")
@@ -20,10 +20,10 @@ export default ({ productData, isLogin }) => {
         } else {
             setPurchaseQuantity(newQuantity)
         }
-    }
+    }, [])
 
     // 款式更新：更新價格
-    const handleModelOnChange = (newModelId) => {
+    const handleModelOnChange = useCallback((newModelId) => {
         setSelectedModelId(newModelId)
 
         const selectedModel = productData.models.find(model => model.model_id === newModelId)
@@ -32,19 +32,19 @@ export default ({ productData, isLogin }) => {
         } else {
             setSelectedProductPrice(productData?.product_price)
         }
-    }
+    }, [])
 
     // 商品加入購物車前，檢查有沒有選款式
-    const validateBeforeAddCart = () => {
+    const validateBeforeAddCart = useCallback(() => {
         if (selectedModelId === null || selectedModelId === "" || selectedModelId === undefined) {
             alertify.alert("", "請選擇商品款式")
         } else {
             addCartItem()
         }
-    }
+    }, [selectedModelId])
 
     // 商品加入購物車
-    const addCartItem = () => {
+    const addCartItem = useCallback(() => {
         const newCartItemData = {
             product_id: productData.product_id,
             model_id: selectedModelId,
@@ -81,7 +81,7 @@ export default ({ productData, isLogin }) => {
                 LoadingPageHide()
                 console.error(error);
             });
-    }
+    }, [selectedModelId, purchaseQuantity])
 
     return <>
         <div className="flex flex-col">

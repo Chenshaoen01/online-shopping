@@ -1,14 +1,16 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useCallback} from "react"
 
 export default ({questionSourceList}) => {
     const [questionList, setQuestionList] = useState(questionSourceList)
-    function faqCardToggle(toggleIndex) {
+
+    // 展開/收起問答內容
+    const faqCardToggle = useCallback((toggleIndex) => {
         const newQuestionList = [...questionList]
         newQuestionList[toggleIndex].isExpanded = !newQuestionList[toggleIndex].isExpanded
         setQuestionList([...newQuestionList])
-    }
+    }, [questionList])
 
     return <>
         <div className="faq-card-list flex flex-col justify-center">

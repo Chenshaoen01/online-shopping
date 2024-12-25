@@ -1,13 +1,12 @@
-'use client'
+"use client";
 import { useState, useEffect, useMemo, useCallback } from "react"
 import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
-let alertify;
+import alertify from 'alertifyjs';
 
 export default () => {
     const [cartData, setCartData] = useState([])
     useEffect(() => {
         if(typeof window !== undefined) { 
-            alertify = requeire("alertifyjs") 
             updateCartData()   
         }
     }, [])
