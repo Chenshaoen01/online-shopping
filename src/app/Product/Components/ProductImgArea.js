@@ -60,7 +60,7 @@ export default ({ productSubImgList }) => {
                         <div className="flex modal__close-area">
                             <button className="modal__close" aria-label="Close modal" data-micromodal-close>X</button>
                         </div>
-                        <img className="product-modal-img" src={`${process.env.NEXT_PUBLIC_API_URL}/images/product/${productSubImgList[mainImgIndex]}`}></img>
+                        <img className="product-modal-img" src={`${process.env.NEXT_PUBLIC_FILE_URL}/${productSubImgList[mainImgIndex]}`}></img>
                     </main>
                 </div>
             </div>
