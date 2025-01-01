@@ -85,7 +85,7 @@ export default () => {
                                     Array.isArray(cartData) && cartData.map(cartItem => (
                                         <div className={`shopping-content-item ${!(cartItem.is_active === 1) && "not-active"}`}
                                             key={cartItem.cart_item_id}>
-                                            <div className="shopping-content-item-image" style={{ backgroundImage: (cartItem.product_img === "" || cartItem.product_img === null || cartItem.product_img === undefined) ? `url('/no-image.png')` : `url('${process.env.NEXT_PUBLIC_API_URL}/images/product/${cartItem.product_img}')` }}></div>
+                                            <div className="shopping-content-item-image" style={{ backgroundImage: (cartItem.product_img === "" || cartItem.product_img === null || cartItem.product_img === undefined) ? `url('/no-image.png')` : `url('${process.env.NEXT_PUBLIC_FILE_URL}/${cartItem.product_img}')` }}></div>
                                             <div className="w-full flex items-top justify-between">
                                                 <div className="shopping-content-item-info">
                                                     <p className="font-bold text-xl mb-1">{cartItem.product_name}</p>

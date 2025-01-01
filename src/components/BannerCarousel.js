@@ -32,7 +32,7 @@ export default function App({bannerSourceList}) {
                         <SwiperSlide key={imageIndex}>
                             <a target="_blank" href={image.banner_link}
                                  className="homepage-carousel-item"
-                                 style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/images/banner/${image.banner_img}')` }}></a>
+                                 style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_FILE_URL}/${image.banner_img}')` }}></a>
                         </SwiperSlide>
                     )
                 }

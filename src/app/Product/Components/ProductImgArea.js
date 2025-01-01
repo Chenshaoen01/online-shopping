@@ -26,7 +26,7 @@ export default ({ productSubImgList }) => {
         <div className="product-detail-img-area mb-8">
             <div className="product-detail-main-img"
                 onClick={() => MicroModal.show("modal-1")}
-                style={{ backgroundImage: (productSubImgList[mainImgIndex] === "" || productSubImgList[mainImgIndex] === null || productSubImgList[mainImgIndex] === undefined) ? `url('/no-image.png')` : `url('${process.env.NEXT_PUBLIC_API_URL}/images/product/${productSubImgList[mainImgIndex]}')` }}
+                style={{ backgroundImage: (productSubImgList[mainImgIndex] === "" || productSubImgList[mainImgIndex] === null || productSubImgList[mainImgIndex] === undefined) ? `url('/no-image.png')` : `url('${process.env.NEXT_PUBLIC_FILE_URL}/${productSubImgList[mainImgIndex]}')` }}
                 data-fancybox>
             </div>
             {
@@ -43,7 +43,7 @@ export default ({ productSubImgList }) => {
                         {
                             productSubImgList.map((subImg, subImgIndex) =>
                                 <div className={subImgClassName(subImgIndex)} key={subImgIndex}
-                                    style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/images/product/${subImg}')` }}
+                                    style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_FILE_URL}/${subImg}')` }}
                                     onClick={() => { setMainImgIndex(subImgIndex) }}>
                                 </div>
                             )

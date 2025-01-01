@@ -22,13 +22,9 @@ export default function () {
                 credentials: 'include',
                 body: JSON.stringify({ access_token: table.access_token }),
             })
-            .then(res => res.json())
-            .then((res) => {
-                if(res.csrfToken) {
-                    document.cookie = `csrfToken=${res.csrfToken}; path=/`;
-                }
+            .then(res => {
                 router.push('/')
-            });
+            })
         } else {
             setTimeout(() => {
                 router.push('/')
