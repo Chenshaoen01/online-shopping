@@ -18,8 +18,7 @@ export default ({ isLogIn }) => {
             method: 'POST',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': document.cookie.split('; ').find(row => row.startsWith('csrfToken='))?.split('=')[1]
+                'Content-Type': 'application/json'
             }
         })
             .then(res => {
@@ -46,6 +45,7 @@ export default ({ isLogIn }) => {
         })
             .then(res => {
                 if (res.ok) {
+                    localStorage.removeItem("csrfToken")
                     router.push("/User/Login")
                 } else {
                     console.error('登出失敗');

@@ -108,20 +108,22 @@ export default function Login({ pageType }) {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ user_email: email, user_password: password }),
-                    credentials: 'include', // 讓 Cookie 隨請求發送
-                });
+                    credentials: 'include',
+                })
                 LoadingPageHide()
 
-                if (!response.ok) {
+                if (response.ok) {
+                    const sucessData = await response.json();
+                    localStorage.setItem("csrfToken", sucessData.csrfToken)
+                    handleLocalStorageData()
+                    setTimeout(() => {
+                        router.push("/User/Login/LoginSuccess");
+                    }, 2000)
+                } else {
                     const errorData = await response.json();
                     alertify.alert("", errorData.message);
                     return;
                 }
-
-                handleLocalStorageData()
-                setTimeout(() => {
-                    router.push("/User/Login/LoginSuccess");
-                }, 2000)
             } catch (error) {
                 LoadingPageHide()
                 console.error(error);

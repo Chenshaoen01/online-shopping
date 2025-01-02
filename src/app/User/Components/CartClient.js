@@ -53,12 +53,20 @@ export default () => {
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-Token': document.cookie.split('; ').find(row => row.startsWith('csrfToken='))?.split('=')[1]
+                    'X-CSRF-Token': localStorage.getItem("csrfToken")
                 }
             })
-                .then(res => res.json())
                 .then(res => {
                     LoadingPageHide()
+                    if (!res.ok) {
+                        if(res.status === 401) {
+                            alertify.alert("", "購物車品項刪除失敗：尚未登入")
+                        } else {
+                            alertify.alert("", "購物車品項刪除失敗")
+                        }
+                        return
+                    }
+                    alertify.alert("", "購物車品項刪除成功")
                     updateCartData()
                 })
         }
@@ -107,7 +115,7 @@ export default () => {
                                     <span className="me-2 font-bold text-xl">NT$ {cartTotalPrice}</span>
                                 </div>
                             </div>
-                            <div className="w-full flex justify-center items-center my-4">
+                            <div className="w-full flex justify-center items-center my-8">
                                 <button type="button" className="button-md button-dark">結帳</button>
                             </div>
                         </>

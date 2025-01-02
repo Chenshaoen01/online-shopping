@@ -58,7 +58,7 @@ export default ({ productData, isLogin }) => {
             body: JSON.stringify(newCartItemData),
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-Token': document.cookie.split('; ').find(row => row.startsWith('csrfToken='))?.split('=')[1]
+                'X-CSRF-Token': localStorage.getItem("csrfToken")
             }
         })
             .then(res => {

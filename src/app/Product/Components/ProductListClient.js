@@ -23,7 +23,7 @@ export default ({ categoryId }) => {
         const urlQuery = categoryId === "All" ? `page=${currentPage}` : `category_id=${categoryId}&page=${currentPage}`
 
         LoadingPageShow()
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/productCategory/getCategoryProduct?${urlQuery}    `)
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/productCategory/getCategoryProduct?${urlQuery}`)
             .then(res => res.json())
             .then(res => {
                 if (res.categoryData) {
