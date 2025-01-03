@@ -193,13 +193,10 @@ body {
 .footer {
   background-color: var(--primary-light);
   padding: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .footer-logo {
-  width: 25px;
+  width: 30px;
   height: auto;
 }
 
