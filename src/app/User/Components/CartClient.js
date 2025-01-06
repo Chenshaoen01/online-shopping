@@ -4,6 +4,7 @@ import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
 import alertify from 'alertifyjs';
 
 export default () => {
+    const [cartTotalPrice, setCartTotalPrice] = useState(0)
     const [cartData, setCartData] = useState([])
     useEffect(() => {
         if(typeof window !== undefined) { 
@@ -26,6 +27,7 @@ export default () => {
                 .then(res => {
                     LoadingPageHide()
                     if (res.cart_items) {
+                        setCartTotalPrice(res.total_price)
                         setCartData(res.cart_items)
                     }
                 })
@@ -72,15 +74,6 @@ export default () => {
         }
     }
 
-    const cartTotalPrice = useMemo(() => {
-        return cartData.reduce((priceAccumulator, currentCartItem) => {
-            if (currentCartItem.is_active === 1) {
-                priceAccumulator += parseFloat(currentCartItem.quantity) * parseFloat(currentCartItem.model_price)
-            }
-            return priceAccumulator
-        }, 0)
-    }, [cartData])
-
     return <>
         <div className="main-content-area">
             <div className="custom-container">
@@ -100,7 +93,7 @@ export default () => {
                                                     <p><span className="title-md">規格</span>{cartItem.model_name}</p>
                                                     <p><span className="title-md">數量</span>{cartItem.quantity}</p>
                                                     <p><span className="title-md">單價</span>NT$ {cartItem.model_price}</p>
-                                                    <p><span className="title-md">小計</span>NT$ {parseFloat(cartItem.model_price) * parseFloat(cartItem.quantity)}</p>
+                                                    <p><span className="title-md">小計</span>NT$ {cartItem.item_price}</p>
                                                 </div>
                                                 <div className="flex items-center">
                                                     <button type="button" className="button-md button-dark"
@@ -116,7 +109,9 @@ export default () => {
                                 </div>
                             </div>
                             <div className="w-full flex justify-center items-center my-8">
-                                <button type="button" className="button-md button-dark">結帳</button>
+                                <button type="button" className="button-md button-dark" onClick={() => {
+                                    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/ecpayment/`
+                                }}>結帳</button>
                             </div>
                         </>
                     ) : <p className="text-center mt-16 text-xl">購物車目前尚無內容</p>
