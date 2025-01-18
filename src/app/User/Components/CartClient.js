@@ -1,5 +1,7 @@
 "use client";
-import { useState, useEffect, useMemo, useCallback } from "react"
+import { useState, useEffect, useCallback } from "react"
+import Link from "next/link";
+
 import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
 import alertify from 'alertifyjs';
 
@@ -20,7 +22,7 @@ export default () => {
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-Token': document.cookie.split('; ').find(row => row.startsWith('csrfToken='))?.split('=')[1]
+                    'X-CSRF-Token': localStorage.getItem("csrfToken")
                 }
             })
                 .then(res => res.json())
@@ -109,9 +111,7 @@ export default () => {
                                 </div>
                             </div>
                             <div className="w-full flex justify-center items-center my-8">
-                                <button type="button" className="button-md button-dark" onClick={() => {
-                                    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/ecpayment/`
-                                }}>結帳</button>
+                                <Link className="button-md button-dark" href="/User/Order/Confirm">結帳</Link>
                             </div>
                         </>
                     ) : <p className="text-center mt-16 text-xl">購物車目前尚無內容</p>
