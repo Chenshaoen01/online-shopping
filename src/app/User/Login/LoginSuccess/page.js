@@ -1,10 +1,6 @@
 'use client'
 import { useEffect } from "react"
-import { useRouter } from 'next/navigation';
-
 export default function () {
-    const router = useRouter()
-
     useEffect(() => {
         const hasAccessToken = window.location.href.includes('access_token')
         if(hasAccessToken) {
@@ -25,12 +21,12 @@ export default function () {
             .then(res => res.json())
             .then(res => {
                 localStorage.setItem("csrfToken", res.csrfToken)
-                router.push('/')
+                window.location = `${window.location.origin}/`
             })
         } else {
             setTimeout(() => {
-                router.push('/')
-            }, 2000)
+                window.location = `${window.location.origin}/`
+            }, 1500)
         }
     }, [])
     return <>
