@@ -15,9 +15,18 @@ export default async ({ params }) => {
     const relatedProductData = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/related/${params.id}`, { cache: "no-cache" }).then(res => res.json())
 
     // 從cookie查詢是否登入
-    const cookie = await cookies()
-    const jwtToken = cookie.get('jwt')
-    const isLogin = jwtToken !== undefined
+    const cookieHeader = cookies().toString()
+    const isLogin = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/checkLogin`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Cookie': cookieHeader
+        }
+    }).then(res => {
+        return new Promise(resolve => {
+            resolve(res.status === 200)
+        })
+    })
 
     return <>
         <Navbar></Navbar>
@@ -34,7 +43,7 @@ export default async ({ params }) => {
                     </div>
                     {/* 產品名稱/價格/連結/數量/款式/購物按鈕 */}
                     <div className="col-span-12 md:col-span-5">
-                        <ProductInfo productData={productData} isLogin={isLogin}></ProductInfo>
+                        <ProductInfo productData={productData} isLoginDefault={isLogin}></ProductInfo>
                     </div>
                 </div>
                 <div className="section-title my-8">商品介紹</div>

@@ -3,12 +3,14 @@ import Link from "next/link"
 import { useRouter } from 'next/navigation'
 import { useEffect, useState, useCallback } from "react"
 
-export default ({ isLogIn }) => {
+export default ({ isLoginDefalut }) => {
+
     const router = useRouter()
     const [isMobileNavbarExpanded, setIsMobileNavbarExpanded] = useState(false)
     const [cartData, setCartData] = useState({})
+    const [isLogin, setIsLogin] = useState(isLoginDefalut)
     useEffect(() => {
-        if (isLogIn && typeof window !== undefined) {
+        if (isLogin && typeof window !== undefined) {
             getUserCart()
         }
     }, [])
@@ -23,6 +25,7 @@ export default ({ isLogIn }) => {
         })
             .then(res => {
                 if(!res.ok) {
+                    setIsLogin(false)
                     return new Promise.reject(new Error())
                 }
                 return res.json()
@@ -71,7 +74,7 @@ export default ({ isLogIn }) => {
                 </div>
                 <div className="navbar-options-back-area">
                     {
-                        isLogIn && <>
+                        isLogin && <>
                             <Link href="/User/Order/List" className="me-4 navbar-option relative">我的訂單</Link>
                             <Link href="/User/Cart" className="me-4 navbar-option">
                                 <div className="flex items-center relative">
@@ -83,8 +86,8 @@ export default ({ isLogIn }) => {
                             </Link>
                         </>
                     }
-                    {isLogIn && <button className="me-4 navbar-option" type="button" onClick={logOut}>登出</button>}
-                    {!isLogIn && <>
+                    {isLogin && <button className="me-4 navbar-option" type="button" onClick={logOut}>登出</button>}
+                    {!isLogin && <>
                         <Link className="me-4 navbar-option" href="/User/Login">登入</Link>
                         <Link className="me-8 navbar-option" href="/User/Register">註冊</Link>
                     </>}

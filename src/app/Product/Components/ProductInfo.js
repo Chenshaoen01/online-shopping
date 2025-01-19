@@ -3,7 +3,8 @@ import { useState, useCallback } from "react"
 import alertify from "alertifyjs"
 import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
 
-export default ({ productData, isLogin }) => {
+export default ({ productData, isLoginDefault }) => {
+    const [isLogin, setIsLogin] = useState(isLoginDefault)
     const [purchaseQuantity, setPurchaseQuantity] = useState(1)
     const [selectedModelId, setSelectedModelId] = useState("")
     const [selectedProductPrice, setSelectedProductPrice] = useState(productData?.product_price)
@@ -64,6 +65,7 @@ export default ({ productData, isLogin }) => {
             .then(res => {
                 if (!res.ok) {
                     if(res.status === 401) {
+                        setIsLogin(false)
                         alertify.alert("", "商品加入購物車失敗：尚未登入")
                     } else {
                         alertify.alert("", "商品加入購物車失敗")
