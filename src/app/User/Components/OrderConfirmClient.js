@@ -79,12 +79,12 @@ export default () => {
     }, [orderCvsType])
 
     // 結帳前檢查是否選擇物流門市
-    const beforeOrderConfirm = useCallback(async () => {
+    const beforeCreateOrderValidation = useCallback(async () => {
         if(selectedStore.StoreId === null || selectedStore.StoreId === "" || selectedStore.StoreId === undefined) {
             alertify.alert("", "未選取出貨門市")
         } else {
             LoadingPageShow()
-            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/logistic/setLogisticData`, {
+            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order`, {
                 method: 'POST',
                 credentials: 'include',
                 body: JSON.stringify({
@@ -99,7 +99,7 @@ export default () => {
             })
                 .then(res => res.json())
                 .then(res => {
-                    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/ecpayment/`
+                    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/ecpayment?orderId=${res.orderId}`
                     LoadingPageHide()
                 })
         }
@@ -167,7 +167,7 @@ export default () => {
                 </div>
                 <div className="w-full flex justify-center items-center my-8">
                     <button type="button" className="button-md button-dark" onClick={() => {
-                        beforeOrderConfirm()
+                        beforeCreateOrderValidation()
                     }}>前往付款</button>
                 </div>
             </div>
