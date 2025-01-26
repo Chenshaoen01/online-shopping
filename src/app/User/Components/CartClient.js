@@ -6,17 +6,18 @@ import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
 import alertify from 'alertifyjs';
 
 export default () => {
+    const [isLoading, setIsLoading] = useState(true)
     const [cartTotalPrice, setCartTotalPrice] = useState(0)
     const [cartData, setCartData] = useState([])
     useEffect(() => {
-        if(typeof window !== undefined) { 
-            updateCartData()   
+        if (typeof window !== undefined) {
+            updateCartData()
         }
     }, [])
 
     const updateCartData = useCallback(() => {
         LoadingPageShow()
-        if(typeof window !== undefined) {
+        if (typeof window !== undefined) {
             fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/`, {
                 method: 'POST',
                 credentials: 'include',
@@ -28,6 +29,7 @@ export default () => {
                 .then(res => res.json())
                 .then(res => {
                     LoadingPageHide()
+                    setIsLoading(false)
                     if (res.cart_items) {
                         setCartTotalPrice(res.total_price)
                         setCartData(res.cart_items)
@@ -51,7 +53,7 @@ export default () => {
 
     const deleteCartItem = (deleteCartItemId) => {
         LoadingPageShow()
-        if(typeof window !== undefined) {
+        if (typeof window !== undefined) {
             fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/items/${deleteCartItemId}`, {
                 method: 'DELETE',
                 credentials: 'include',
@@ -63,7 +65,7 @@ export default () => {
                 .then(res => {
                     LoadingPageHide()
                     if (!res.ok) {
-                        if(res.status === 401) {
+                        if (res.status === 401) {
                             alertify.alert("", "購物車品項刪除失敗：尚未登入")
                         } else {
                             alertify.alert("", "購物車品項刪除失敗")
@@ -81,40 +83,44 @@ export default () => {
             <div className="custom-container">
                 <div className="section-title my-8">我的購物車</div>
                 {
-                    (Array.isArray(cartData) && cartData.length > 0) ? (
-                        <>
-                            <div className="shopping-content-list">
-                                {
-                                    Array.isArray(cartData) && cartData.map(cartItem => (
-                                        <div className={`shopping-content-item ${!(cartItem.is_active === 1) && "not-active"}`}
-                                            key={cartItem.cart_item_id}>
-                                            <div className="shopping-content-item-image" style={{ backgroundImage: (cartItem.product_img === "" || cartItem.product_img === null || cartItem.product_img === undefined) ? `url('/no-image.png')` : `url('${process.env.NEXT_PUBLIC_FILE_URL}/${cartItem.product_img}')` }}></div>
-                                            <div className="w-full flex items-top justify-between">
-                                                <div className="shopping-content-item-info">
-                                                    <p className="font-bold text-xl mb-1">{cartItem.product_name}</p>
-                                                    <p><span className="title-md">規格</span>{cartItem.model_name}</p>
-                                                    <p><span className="title-md">數量</span>{cartItem.quantity}</p>
-                                                    <p><span className="title-md">單價</span>NT$ {cartItem.model_price}</p>
-                                                    <p><span className="title-md">小計</span>NT$ {cartItem.item_price}</p>
+                    isLoading ? <p className="text-center mt-16 text-xl">資料載入中</p> : <>
+                        {
+                            (Array.isArray(cartData) && cartData.length > 0) ? (
+                                <>
+                                    <div className="shopping-content-list">
+                                        {
+                                            Array.isArray(cartData) && cartData.map(cartItem => (
+                                                <div className={`shopping-content-item ${!(cartItem.is_active === 1) && "not-active"}`}
+                                                    key={cartItem.cart_item_id}>
+                                                    <div className="shopping-content-item-image" style={{ backgroundImage: (cartItem.product_img === "" || cartItem.product_img === null || cartItem.product_img === undefined) ? `url('/no-image.png')` : `url('${process.env.NEXT_PUBLIC_FILE_URL}/${cartItem.product_img}')` }}></div>
+                                                    <div className="w-full flex items-top justify-between">
+                                                        <div className="shopping-content-item-info">
+                                                            <p className="font-bold text-xl mb-1">{cartItem.product_name}</p>
+                                                            <p><span className="title-md">規格</span>{cartItem.model_name}</p>
+                                                            <p><span className="title-md">數量</span>{cartItem.quantity}</p>
+                                                            <p><span className="title-md">單價</span>NT$ {cartItem.model_price}</p>
+                                                            <p><span className="title-md">小計</span>NT$ {cartItem.item_price}</p>
+                                                        </div>
+                                                        <div className="flex items-center">
+                                                            <button type="button" className="button-md button-dark"
+                                                                onClick={() => { deleteConfirm(cartItem.cart_item_id) }}>刪除</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div className="flex items-center">
-                                                    <button type="button" className="button-md button-dark"
-                                                        onClick={() => { deleteConfirm(cartItem.cart_item_id) }}>刪除</button>
-                                                </div>
-                                            </div>
+                                            ))
+                                        }
+                                        <div className="flex justify-end pt-2">
+                                            <span className="me-2 font-bold text-xl">總計</span>
+                                            <span className="me-2 font-bold text-xl">NT$ {cartTotalPrice}</span>
                                         </div>
-                                    ))
-                                }
-                                <div className="flex justify-end pt-2">
-                                    <span className="me-2 font-bold text-xl">總計</span>
-                                    <span className="me-2 font-bold text-xl">NT$ {cartTotalPrice}</span>
-                                </div>
-                            </div>
-                            <div className="w-full flex justify-center items-center my-8">
-                                <Link className="button-md button-dark" href="/User/Order/Confirm">結帳</Link>
-                            </div>
-                        </>
-                    ) : <p className="text-center mt-16 text-xl">購物車目前尚無內容</p>
+                                    </div>
+                                    <div className="w-full flex justify-center items-center my-8">
+                                        <Link className="button-md button-dark" href="/User/Order/Confirm">建立訂單</Link>
+                                    </div>
+                                </>
+                            ) : <p className="text-center mt-16 text-xl">購物車目前尚無內容</p>
+                        }
+                    </>
                 }
             </div>
         </div>

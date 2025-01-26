@@ -27,7 +27,7 @@ export default function Login({ pageType }) {
         const validateColumn = pageType === "Register" ? [
             { columnState: name, columnChName: "使用者名稱" },
             { columnState: email, columnChName: "電子信箱" },
-            { columnState: tel, columnChName: "連絡電話" },
+            { columnState: tel, columnChName: "手機號碼" },
             { columnState: password, columnChName: "密碼" }
         ] : [
             { columnState: email, columnChName: "電子信箱" },
@@ -50,11 +50,19 @@ export default function Login({ pageType }) {
         return email !== "" && email !== null && email !== undefined && !emailregex.test(email) ? "電子信箱格式不符" : ""
     }, [email])
 
+    const phoneNumRegexValidate = useCallback(() => {
+        const phoneRegex = /^09\d{8}$/;
+        return tel !== "" && tel !== null && tel !== undefined && !phoneRegex.test(tel) 
+            ? "手機號碼格式不符" : "";
+    }, [tel]);
+
     // 註冊
     const handleRegister = useCallback(async () => {
         const rquiredInvalidColumnList = RequiredColvalidate();
         const emailRegexInvalidString = emailRegexValidate()
-        if (rquiredInvalidColumnList.length > 0 || emailRegexInvalidString !== "") {
+        const phoneNumRegexInvalidString = phoneNumRegexValidate()
+
+        if (rquiredInvalidColumnList.length > 0 || emailRegexInvalidString !== "" || phoneNumRegexInvalidString !== "") {
             const inValidStringList = []
             if (rquiredInvalidColumnList.length > 0) {
                 inValidStringList.push(`${rquiredInvalidColumnList.join("、")}為必填項目`)
@@ -62,7 +70,10 @@ export default function Login({ pageType }) {
             if (emailRegexInvalidString !== "") {
                 inValidStringList.push(emailRegexInvalidString)
             }
-            const inValidString = inValidStringList.join("，");
+            if (phoneNumRegexInvalidString !== "") {
+                inValidStringList.push(phoneNumRegexInvalidString)
+            }
+            const inValidString = inValidStringList.join("<br>");
             alertify.alert("", inValidString);
         } else {
             try {
@@ -210,7 +221,7 @@ export default function Login({ pageType }) {
                                 </label>
                                 {pageType === "Register" && (
                                     <label className="w-full flex flex-col mb-2">
-                                        <span className="me-4 mb-2">連絡電話</span>
+                                        <span className="me-4 mb-2">手機號碼</span>
                                         <input
                                             type="text"
                                             value={tel}
