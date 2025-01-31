@@ -140,7 +140,7 @@ export default function Login({ pageType }) {
                 console.error(error);
             }
         }
-    }, [email, password])
+    }, [isRemember, email, password])
 
     // 登入後儲存/移除 LocalStorage 的使用者登入資料
     const handleLocalStorageData = useCallback(() => {
