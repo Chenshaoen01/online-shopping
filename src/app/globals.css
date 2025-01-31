@@ -65,17 +65,23 @@ body {
 }
 
 .main-content-area {
+  padding-bottom: 50px;
+}
+
+.main-body {
   width: 100%;
   min-height: 100vh;
-  padding-top: 50px;
-  padding-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: ;
+  position: relative;
 }
 
 /* Navbar */
 .navbar-area-container {
-  width: 100vw;
+  width: 100%;
   height: auto;
-  position: fixed;
+  position: sticky;
   top: 0;
   z-index: 2100000000;
   background-color: rgba(0, 0, 0, 0.5);
@@ -135,14 +141,15 @@ body {
 
 @media (max-width: 1023px) {
   .navbar-area-container {
-    width: 100vw;
+    width: 100%;
     height: auto;
-    position: fixed;
+    position: sticky;
     top: 0;
     background-color: rgba(0, 0, 0, 0.5);
   }
 
   .navbar-area-container.active {
+    position: fixed;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
   }
