@@ -113,6 +113,11 @@ body {
   cursor: pointer;
 }
 
+.cart-icon {
+  width: 25px;
+  height: auto;
+}
+
 .cart-count-badge {
   position: absolute;
   width: 14px;

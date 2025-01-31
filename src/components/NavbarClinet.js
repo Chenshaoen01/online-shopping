@@ -75,15 +75,16 @@ export default ({ isLoginDefalut }) => {
                 <div className="navbar-options-back-area">
                     {
                         isLogin && <>
-                            <Link href="/User/Order/List" className="me-4 navbar-option relative">我的訂單</Link>
                             <Link href="/User/Cart" className="me-4 navbar-option">
                                 <div className="flex items-center relative">
-                                    <span>購物車</span>
+                                    <img className="cart-icon" src="/cart-primary.png"></img>
+                                    <span className="ml-2 lg:hidden">購物車</span>
                                     {
                                         Array.isArray(cartData?.cart_items) && <span className="cart-count-badge">{cartData?.cart_items?.length}</span>
                                     }
                                 </div>
                             </Link>
+                            <Link href="/User/Order/List" className="me-4 navbar-option relative">我的訂單</Link>
                         </>
                     }
                     {isLogin && <button className="me-4 navbar-option" type="button" onClick={logOut}>登出</button>}
