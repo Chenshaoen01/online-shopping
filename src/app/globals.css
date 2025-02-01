@@ -222,7 +222,6 @@ body {
 .userpage-main-content-area {
   width: 100%;
   min-height: 100vh;
-  padding-top: 50px;
 }
 
 .userpage-form-background-area {
@@ -294,10 +293,7 @@ body {
 @media (max-width: 767px) {
   .userpage-form-area-container {
     background-color: transparent;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: 30% center;
-    background-image: url('/primary-body-background.png');
+    background-image: none;
   }
 }
 
