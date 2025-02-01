@@ -641,7 +641,8 @@ body {
 @media (max-width: 576px) {
   .title-md {
     display: inline-block;
-    width: 150px;
+    min-width: 115px;
+    max-width: 115px;
     font-weight: bold;
   }
 }
@@ -682,6 +683,9 @@ body {
 }
 
 @media (max-width: 576px) {
+  .shopping-content-list {
+    padding: 1rem;
+  }
   .shopping-content-item {
     flex-direction: column;
   }

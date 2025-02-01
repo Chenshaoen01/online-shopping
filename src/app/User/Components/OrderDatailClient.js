@@ -47,10 +47,19 @@ export default ({orderData}) => {
             <div className="custom-container">
                 {/* 訂單基本資料 */}
                 <div className="section-title my-8">訂單基本資料</div>
-                <p><span className="title-md">訂單編號</span>{orderData.order.order_id}</p>
-                <p><span className="title-md">訂單金額</span>${orderData.order.total_price}</p>
-                <p><span className="title-md">訂單建立日期</span>{getDateString(orderData.order.created_at)}</p>
-                <p><span className="title-md">訂單狀態</span>{orderData.order.order_status}</p>
+                <div className="flex">
+                    <span className="title-md">訂單編號</span>
+                    <span className="text-wrap break-all">{orderData.order.order_id}</span>
+                </div>
+                <div className="flex">
+                    <span className="title-md">訂單金額</span>${orderData.order.total_price}
+                </div>
+                <div className="flex">
+                    <span className="title-md">訂單建立日期</span>{getDateString(orderData.order.created_at)}
+                </div>
+                <div className="flex">
+                    <span className="title-md">訂單狀態</span>{orderData.order.order_status}
+                </div>
                 {
                     orderData.order.order_status === '未付款' && <>
                         <div className="w-full flex justify-center items-center my-8">
@@ -67,11 +76,26 @@ export default ({orderData}) => {
                         Array.isArray(orderData.items) && orderData.items.map(orderItem => (
                             <div className="shopping-content-item" key={orderItem.order_item_id}>
                                 <div className="shopping-content-item-info">
-                                    <p className="font-bold text-lg mb-1">{orderItem.product_name}</p>
-                                    <p><span className="title-md">規格</span>{orderItem.model_name}</p>
-                                    <p><span className="title-md">數量</span>{orderItem.quantity}</p>
-                                    <p><span className="title-md">單價</span>NT$ {orderItem.model_price}</p>
-                                    <p><span className="title-md">小計</span>NT$ {parseFloat(orderItem.model_price) * parseFloat(orderItem.quantity)}</p>
+                                    <div className="flex">
+                                        <span className="title-md">商品名稱</span>
+                                        <span>{orderItem.product_name}</span>
+                                    </div>
+                                    <div className="flex">
+                                        <span className="title-md">款式</span>
+                                        <span>{orderItem.model_name}</span>
+                                    </div>
+                                    <div className="flex">
+                                        <span className="title-md">數量</span>
+                                        <span>{orderItem.quantity}</span>
+                                    </div>
+                                    <div className="flex">
+                                        <span className="title-md">單價</span>
+                                        <span>NT$ {orderItem.model_price}</span>
+                                    </div>
+                                    <div className="flex">
+                                        <span className="title-md">小計</span>
+                                        <span>NT$ {parseFloat(orderItem.model_price) * parseFloat(orderItem.quantity)}</span>
+                                    </div>
                                 </div>
                             </div>
                         ))

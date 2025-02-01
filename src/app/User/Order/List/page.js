@@ -26,7 +26,7 @@ export default async () => {
                                     <div className="flex" key={order.order_id + orderIndex}>
                                         <Link className="order-card mb-6" href={`/User/Order/Detail/${order.order_id}`}>
                                             <p><span className="title-md">訂單編號</span>{order.order_id}</p>
-                                            <p><span className="title-md">訂單金額</span>{order.total_price}</p>
+                                            <p><span className="title-md">訂單金額</span>${order.total_price}</p>
                                             <p><span className="title-md">訂單建立日期</span>{order.created_at}</p>
                                             <p><span className="title-md">訂單狀態</span>{order.order_status}</p>
                                         </Link>

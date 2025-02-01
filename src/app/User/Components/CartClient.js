@@ -93,7 +93,7 @@ export default () => {
                                                 <div className={`shopping-content-item ${!(cartItem.is_active === 1) && "not-active"}`}
                                                     key={cartItem.cart_item_id}>
                                                     <div className="shopping-content-item-image" style={{ backgroundImage: (cartItem.product_img === "" || cartItem.product_img === null || cartItem.product_img === undefined) ? `url('/no-image.png')` : `url('${process.env.NEXT_PUBLIC_FILE_URL}/${cartItem.product_img}')` }}></div>
-                                                    <div className="w-full flex items-top justify-between">
+                                                    <div className="w-full flex flex-col md:flex-row items-top justify-between">
                                                         <div className="shopping-content-item-info">
                                                             <p className="font-bold text-xl mb-1">{cartItem.product_name}</p>
                                                             <p><span className="title-md">規格</span>{cartItem.model_name}</p>
@@ -101,7 +101,7 @@ export default () => {
                                                             <p><span className="title-md">單價</span>NT$ {cartItem.model_price}</p>
                                                             <p><span className="title-md">小計</span>NT$ {cartItem.item_price}</p>
                                                         </div>
-                                                        <div className="flex items-center">
+                                                        <div className="flex items-center justify-center mt-4 md:mt-0">
                                                             <button type="button" className="button-md button-dark"
                                                                 onClick={() => { deleteConfirm(cartItem.cart_item_id) }}>刪除</button>
                                                         </div>
