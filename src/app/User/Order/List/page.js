@@ -25,10 +25,22 @@ export default async () => {
                                 userOrderList.map((order, orderIndex) =>
                                     <div className="flex" key={order.order_id + orderIndex}>
                                         <Link className="order-card mb-6" href={`/User/Order/Detail/${order.order_id}`}>
-                                            <p><span className="title-md">訂單編號</span>{order.order_id}</p>
-                                            <p><span className="title-md">訂單金額</span>${order.total_price}</p>
-                                            <p><span className="title-md">訂單建立日期</span>{order.created_at}</p>
-                                            <p><span className="title-md">訂單狀態</span>{order.order_status}</p>
+                                            <div className="flex">
+                                                <span className="title-md">訂單編號</span>
+                                                <span className="break-all">{order.order_id}</span>
+                                            </div>
+                                            <div className="flex">
+                                                <span className="title-md">訂單金額</span>
+                                                <span>${order.total_price}</span>
+                                            </div>
+                                            <div className="flex">
+                                                <span className="title-md">訂單建立日期</span>
+                                                <span>{order.created_at}</span>
+                                            </div>
+                                            <div className="flex">
+                                                <span className="title-md">訂單狀態</span>
+                                                <span>{order.order_status}</span>
+                                            </div>
                                         </Link>
                                     </div>
                                 )

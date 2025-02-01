@@ -2,7 +2,7 @@ export default () => {
     return <div className="footer flex flex-col items-center mt-auto">
         <div className="flex items-center mb-2">
             <img className="footer-logo me-2" src="/logo1.png"></img>
-            <span className="font-bold">毛孩物坊</span>
+            <span className="font-bold whitespace-nowrap">毛孩物坊</span>
         </div>
         <div className="flex flex-col md:flex-row text-center">
             <span className="mx-4">本網站僅為個人作品，無商業用途</span>
