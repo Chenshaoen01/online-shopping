@@ -13,9 +13,7 @@ export default function App({bannerSourceList}) {
 
     return (
         <>
-            <Swiper
-                spaceBetween={30}
-                centeredSlides={true}
+            <Swiper 
                 autoplay={{
                     delay: 2500,
                     disableOnInteraction: true,

@@ -27,8 +27,14 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   background-image: url('/primary-body-background.png');
   background-size: 100% auto;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
   background-position: top;
+}
+
+@media (max-width: 767px) {
+  body {
+    background-size: 200% auto;
+  }
 }
 
 .custom-container {
@@ -977,4 +983,9 @@ body {
   width: 300px;
   border-radius: 1rem;
   font-size: 1.25rem;
+}
+
+.close-icon {
+  width: 25px;
+  height: 25px;
 }

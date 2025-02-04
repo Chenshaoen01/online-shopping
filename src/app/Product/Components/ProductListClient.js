@@ -78,7 +78,7 @@ export default ({ categoryId }) => {
                                                 )
                                             }
                                         </div>
-                                        <div className="flex justify-end">
+                                        <div className="flex justify-center mt-6">
                                             <PageButtonGroup lastPage={lastPage} pageButtonList={pageButtonList} currentPage={currentPage} setCurrentPage={setCurrentPage} getDataList={getDataList} />
                                         </div>
                                     </>

@@ -27,7 +27,7 @@ export default function App({productList}) {
                           slidesPerView: 3,
                         },
                       }}
-                    centeredSlides={true}
+                    centeredSlides={false}
                     loop={true}
                     navigation={true}
                     modules={[Navigation]}

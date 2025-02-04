@@ -56,11 +56,12 @@ export default ({ productSubImgList }) => {
         <div className="modal micromodal-slide product-img-modal mt-8" id="modal-1" aria-hidden="true">
             <div className="modal__overlay" data-micromodal-close>
                 <div className="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
-                    <main className="modal__content" id="modal-1-content">
-                        <div className="flex modal__close-area">
-                            <button className="modal__close" aria-label="Close modal" data-micromodal-close>X</button>
+                    <main className="flex" id="modal-1-content">
+                        <div className="fixed top-4 right-4 modal__close cursor-pointer"
+                             aria-label="Close modal" data-micromodal-close>
+                             <img className="close-icon" src="/x-circle-fill.svg"></img>
                         </div>
-                        <img className="product-modal-img" src={`${process.env.NEXT_PUBLIC_FILE_URL}/${productSubImgList[mainImgIndex]}`}></img>
+                        <img className="product-modal-img w-full" src={`${process.env.NEXT_PUBLIC_FILE_URL}/${productSubImgList[mainImgIndex]}`}></img>
                     </main>
                 </div>
             </div>
