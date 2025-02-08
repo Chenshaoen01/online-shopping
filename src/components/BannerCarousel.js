@@ -29,8 +29,11 @@ export default function App({bannerSourceList}) {
                     bannerImageList.map((image, imageIndex) =>
                         <SwiperSlide key={imageIndex}>
                             <a target="_blank" href={image.banner_link}
-                                 className="homepage-carousel-item"
+                                 className="homepage-carousel-item hidden md:block"
                                  style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_FILE_URL}/${image.banner_img}')` }}></a>
+                            <a target="_blank" href={image.banner_link}
+                                 className="homepage-carousel-item block md:hidden"
+                                 style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_FILE_URL}/${image.mobile_banner_img}')` }}></a>
                         </SwiperSlide>
                     )
                 }

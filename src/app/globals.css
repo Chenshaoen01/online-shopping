@@ -305,12 +305,16 @@ body {
 
 /* 首頁輪播 */
 .homepage-carousel-item {
-  display: block;
   width: 100%;
   aspect-ratio: 3/1;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+@media (max-width: 767px) {
+  .homepage-carousel-item {
+    aspect-ratio: 1.5/1;
+  }
 }
 
 /* 首頁商品類別連結 */
