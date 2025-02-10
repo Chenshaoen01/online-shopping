@@ -6,6 +6,7 @@ import "./micromodal.css";
 export const metadata = {
   title: "毛孩物坊",
   description: "毛孩物坊",
+  "google-site-verification": "x4YtdS4stjAmVmjIPiwBnI9EI07fimDdQE8wHTtAE-c"
 };
 
 export default function RootLayout({ children }) {
