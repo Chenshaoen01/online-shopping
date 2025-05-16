@@ -15,7 +15,7 @@ export default ({ productData, isLoginDefault }) => {
         if (parseFloat(newQuantityParseFloat) < 1) {
             alertify.alert("", "商品數量須大於 1")
             setPurchaseQuantity(1)
-        } else if (!Number.isInteger(newQuantityParseFloat)) {
+        } else if (!Number.isInteger(newQuantityParseFloat) && newQuantity !== "") {
             alertify.alert("", "商品數量須為整數")
             setPurchaseQuantity(1)
         } else {
@@ -35,14 +35,16 @@ export default ({ productData, isLoginDefault }) => {
         }
     }, [])
 
-    // 商品加入購物車前，檢查有沒有選款式
+    // 商品加入購物車前，檢查有沒有選款式、填寫數量
     const validateBeforeAddCart = useCallback(() => {
-        if (selectedModelId === null || selectedModelId === "" || selectedModelId === undefined) {
+        if(purchaseQuantity === "" || purchaseQuantity === null) {
+            alertify.alert("", "請填寫商品數量")
+        } else if (selectedModelId === null || selectedModelId === "" || selectedModelId === undefined) {
             alertify.alert("", "請選擇商品款式")
         } else {
             addCartItem()
         }
-    }, [selectedModelId])
+    }, [selectedModelId, purchaseQuantity])
 
     // 商品加入購物車
     const addCartItem = useCallback(() => {
