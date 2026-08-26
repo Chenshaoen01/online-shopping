@@ -30,7 +30,7 @@ export default ({ productData, isLoginDefault }) => {
         setSelectedModelId(newModelId)
 
         const selectedModel = productData.models.find(model => model.model_id === newModelId)
-        if (selectedModel !== null) {
+        if (selectedModel) {
             setSelectedProductPrice(selectedModel.model_price)
         } else {
             setSelectedProductPrice(productData?.product_price)

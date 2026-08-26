@@ -4,29 +4,32 @@ import { cookies } from "next/headers";
 import ProductImgArea from "../../Components/ProductImgArea";
 import ProductInfo from "../../Components/ProductInfo";
 import { LoadingPage } from "@/components/LoadingPage";
+import { notFound } from "next/navigation";
 
 export default async ({ params }) => {
-    // 取得商品資訊
-    const productData = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/${params.id}`, { cache: "no-cache" }).then(res => res.json())
-    const productSubImgList = Array.isArray(productData.images) ? productData.images.map(productImage => productImage.product_img) : []
-
-
-    // 取得相關商品資訊
-    const relatedProductData = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/related/${params.id}`, { cache: "no-cache" }).then(res => res.json())
-
-    // 從cookie查詢是否登入
     const cookieHeader = cookies().toString()
-    const isLogin = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/checkLogin`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-            'Cookie': cookieHeader
-        }
-    }).then(res => {
-        return new Promise(resolve => {
-            resolve(res.status === 200)
+
+    // 同時取得商品資訊、相關商品資訊，並從cookie查詢是否登入
+    const [productRes, relatedProductRes, checkLoginRes] = await Promise.all([
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/${params.id}`, { cache: "no-cache" }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/related/${params.id}`, { cache: "no-cache" }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/checkLogin`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Cookie': cookieHeader
+            }
         })
-    })
+    ])
+
+    if (!productRes.ok) {
+        notFound()
+    }
+
+    const productData = await productRes.json()
+    const productSubImgList = Array.isArray(productData.images) ? productData.images.map(productImage => productImage.product_img) : []
+    const relatedProductData = relatedProductRes.ok ? await relatedProductRes.json() : []
+    const isLogin = checkLoginRes.status === 200
 
     return <>
         <Navbar></Navbar>

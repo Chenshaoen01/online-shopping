@@ -1,5 +1,4 @@
 'use client'
-import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
@@ -9,8 +8,6 @@ import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
 export default function App({bannerSourceList}) {
-    const [bannerImageList] = useState(bannerSourceList);
-
     return (
         <>
             <Swiper 
@@ -26,8 +23,8 @@ export default function App({bannerSourceList}) {
                 modules={[Autoplay, Pagination, Navigation]}
                 className="mySwiper">
                 {
-                    bannerImageList.map((image, imageIndex) =>
-                        <SwiperSlide key={imageIndex}>
+                    bannerSourceList.map(image =>
+                        <SwiperSlide key={image.banner_id}>
                             <a target="_blank" href={image.banner_link}
                                  className="homepage-carousel-item hidden md:block"
                                  style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_FILE_URL}/${image.banner_img}')` }}></a>

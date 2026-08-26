@@ -3,31 +3,33 @@
 import { useState, useCallback} from "react"
 
 export default ({questionSourceList}) => {
-    const [questionList, setQuestionList] = useState(questionSourceList)
+    const [expandedIdList, setExpandedIdList] = useState([])
 
     // 展開/收起問答內容
-    const faqCardToggle = useCallback((toggleIndex) => {
-        const newQuestionList = [...questionList]
-        newQuestionList[toggleIndex].isExpanded = !newQuestionList[toggleIndex].isExpanded
-        setQuestionList([...newQuestionList])
-    }, [questionList])
+    const faqCardToggle = useCallback((questionId) => {
+        setExpandedIdList(previousList => previousList.includes(questionId)
+            ? previousList.filter(expandedId => expandedId !== questionId)
+            : [...previousList, questionId])
+    }, [])
 
     return <>
         <div className="faq-card-list flex flex-col justify-center">
             {
-                questionList.map((question, questionIndex) =>
-                    <div className="faq-card"  key={questionIndex}>
+                questionSourceList.map(question => {
+                    const isExpanded = expandedIdList.includes(question.question_id)
+
+                    return <div className="faq-card" key={question.question_id}>
                         <div className="faq-animal-img"></div>
                         <div className="faq-info"
-                             onClick={() => {faqCardToggle(questionIndex)}}>
+                             onClick={() => {faqCardToggle(question.question_id)}}>
                             <div className="faq-corner"></div>
-                            <div className={question.isExpanded? "faq-question expanded" : "faq-question"}>
+                            <div className={isExpanded? "faq-question expanded" : "faq-question"}>
                                 {question.question_title}
                             </div>
-                            {question.isExpanded && <div className="faq-answer">{question.question_description}</div>}
+                            {isExpanded && <div className="faq-answer">{question.question_description}</div>}
                         </div>
                     </div>
-                )
+                })
             }
         </div>
     </>
