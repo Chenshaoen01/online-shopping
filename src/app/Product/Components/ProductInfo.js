@@ -20,6 +20,9 @@ export default ({ productData, isLoginDefault }) => {
         } else if (!Number.isInteger(newQuantityParseFloat) && newQuantity !== "") {
             alertify.alert("", "商品數量須為整數")
             setPurchaseQuantity(1)
+        } else if (newQuantityParseFloat > 999) {
+            alertify.alert("", "商品數量不可超過 999")
+            setPurchaseQuantity(999)
         } else {
             setPurchaseQuantity(newQuantity)
         }
@@ -49,7 +52,7 @@ export default ({ productData, isLoginDefault }) => {
     }, [selectedModelId, purchaseQuantity])
 
     // 商品加入購物車
-    const addCartItem = useCallback(() => {
+    const addCartItem = useCallback(async () => {
         const newCartItemData = {
             product_id: productData.product_id,
             model_id: selectedModelId,
@@ -57,37 +60,36 @@ export default ({ productData, isLoginDefault }) => {
         }
 
         LoadingPageShow()
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/items`, {
-            method: 'POST',
-            credentials: 'include',
-            body: JSON.stringify(newCartItemData),
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': localStorage.getItem("csrfToken")
-            }
-        })
-            .then(res => {
-                if (!res.ok) {
-                    if(res.status === 401) {
-                        setIsLogin(false)
-                        alertify.alert("", "商品加入購物車失敗：尚未登入")
-                    } else {
-                        alertify.alert("", "商品加入購物車失敗")
-                    }
-                    return Promise.reject(new Error("商品加入購物車失敗"))
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/items`, {
+                method: 'POST',
+                credentials: 'include',
+                body: JSON.stringify(newCartItemData),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': localStorage.getItem("csrfToken")
                 }
-                LoadingPageHide()
-                return res.json()
             })
-            .then(data => {
-                LoadingPageHide()
-                refreshCart()
-                alertify.alert("", "商品已加入購物車")
-            })
-            .catch(error => {
-                LoadingPageHide()
-                console.error(error);
-            });
+
+            if (!res.ok) {
+                if (res.status === 401) {
+                    setIsLogin(false)
+                    alertify.alert("", "商品加入購物車失敗：尚未登入")
+                    return
+                }
+
+                const errorData = await res.json().catch(() => ({}))
+                alertify.alert("", errorData.message ? errorData.message : "商品加入購物車失敗")
+                return
+            }
+
+            refreshCart()
+            alertify.alert("", "商品已加入購物車")
+        } catch (error) {
+            alertify.alert("", "商品加入購物車失敗，請確認網路連線")
+        } finally {
+            LoadingPageHide()
+        }
     }, [selectedModelId, purchaseQuantity, refreshCart])
 
     return <>
@@ -97,7 +99,7 @@ export default ({ productData, isLoginDefault }) => {
             <div className="devider"></div>
             <div className="flex flex-col mb-6">
                 <p className="text-xl font-bold mb-2">購買數量</p>
-                <input type="number" className="w-full primary-input" min="1"
+                <input type="number" className="w-full primary-input" min="1" max="999"
                     value={purchaseQuantity} onChange={(e) => { handleQuantityOnChange(e.target.value) }}></input>
             </div>
             <div className="flex flex-col mb-6">

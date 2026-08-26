@@ -56,13 +56,19 @@ export default function Login({ pageType }) {
             ? "手機號碼格式不符" : "";
     }, [tel]);
 
+    const passwordLengthValidate = useCallback(() => {
+        return password !== "" && password !== null && password !== undefined && password.length < 8
+            ? "密碼至少 8 碼" : "";
+    }, [password]);
+
     // 註冊
     const handleRegister = useCallback(async () => {
         const rquiredInvalidColumnList = RequiredColvalidate();
         const emailRegexInvalidString = emailRegexValidate()
         const phoneNumRegexInvalidString = phoneNumRegexValidate()
+        const passwordLengthInvalidString = passwordLengthValidate()
 
-        if (rquiredInvalidColumnList.length > 0 || emailRegexInvalidString !== "" || phoneNumRegexInvalidString !== "") {
+        if (rquiredInvalidColumnList.length > 0 || emailRegexInvalidString !== "" || phoneNumRegexInvalidString !== "" || passwordLengthInvalidString !== "") {
             const inValidStringList = []
             if (rquiredInvalidColumnList.length > 0) {
                 inValidStringList.push(`${rquiredInvalidColumnList.join("、")}為必填項目`)
@@ -72,6 +78,9 @@ export default function Login({ pageType }) {
             }
             if (phoneNumRegexInvalidString !== "") {
                 inValidStringList.push(phoneNumRegexInvalidString)
+            }
+            if (passwordLengthInvalidString !== "") {
+                inValidStringList.push(passwordLengthInvalidString)
             }
             const inValidString = inValidStringList.join("<br>");
             alertify.alert("", inValidString);

@@ -127,8 +127,15 @@ export default () => {
                                             <span className="me-2 font-bold text-xl">NT$ {cartTotalPrice}</span>
                                         </div>
                                     </div>
-                                    <div className="w-full flex justify-center items-center my-8">
-                                        <Link className="button-md button-dark" href="/User/Order/Confirm">建立訂單</Link>
+                                    <div className="w-full flex flex-col justify-center items-center my-8">
+                                        {
+                                            cartData.some(cartItem => cartItem.is_active !== 1)
+                                                ? <>
+                                                    <button type="button" className="button-md button-dark disabled-button" disabled>建立訂單</button>
+                                                    <p className="mt-4">購物車內有已下架的商品，請先移除後再結帳</p>
+                                                </>
+                                                : <Link className="button-md button-dark" href="/User/Order/Confirm">建立訂單</Link>
+                                        }
                                     </div>
                                 </>
                             ) : <p className="text-center mt-16 text-xl">購物車目前尚無內容</p>
