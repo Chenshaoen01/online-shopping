@@ -16,7 +16,7 @@ export default ({ categoryId }) => {
     // 取得資料列表
     useEffect(() => {
         getDataList()
-    }, [currentPage])
+    }, [categoryId, currentPage])
 
     const getDataList = useCallback(async () => {
         setIsLoading(true)
@@ -30,7 +30,6 @@ export default ({ categoryId }) => {
                     setCategoryData(res.categoryData)
                 }
                 if (Array.isArray(res.dataList)) {
-                    res.dataList.forEach(data => data.isChecked = false)
                     setDataList(res.dataList)
                 }
                 if (res.lastPage) {
@@ -42,7 +41,7 @@ export default ({ categoryId }) => {
                 LoadingPageHide()
                 setIsLoading(false)
             })
-    }, [currentPage]) 
+    }, [categoryId, currentPage])
 
     return <>
         <div className="main-content-area">

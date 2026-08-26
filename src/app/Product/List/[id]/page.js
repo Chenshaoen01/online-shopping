@@ -6,6 +6,6 @@ export default async ({ params }) => {
     return <>
         <LoadingPage></LoadingPage>
         <Navbar></Navbar>
-        <ProductListClient categoryId={params.id}></ProductListClient>
+        <ProductListClient categoryId={params.id} key={params.id}></ProductListClient>
     </>
 }
