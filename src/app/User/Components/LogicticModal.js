@@ -1,3 +1,4 @@
+"use client";
 import { useCallback, useState, forwardRef, useImperativeHandle, useEffect, useRef } from "react"
 import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
 import alertify from "alertifyjs";
@@ -75,41 +76,29 @@ export default forwardRef((props, ref) => {
     const addCountyAndDistrict = useCallback((storeList) => {
         const countySet = new Set();
         const districtMap = new Map();
-    
+
         const updatedStoreList = storeList.map(store => {
             const addressPattern = /^(?<countyName>[^市縣]+[市縣])(?<districtName>[^鄉鎮市區]+[鄉鎮市區])/;
             const match = store.StoreAddr.match(addressPattern);
-    
-            if (match) {
-                const { countyName, districtName } = match.groups;
-                store.countyName = countyName;
-                store.districtName = districtName;
-    
-                countySet.add(countyName);
-    
-                // 如果 districtName 尚未被加入，將其與對應的 countyName 一起加入 Map
-                if (!districtMap.has(districtName)) {
-                    districtMap.set(districtName, countyName);
-                }
-            } else {
-                store.countyName = "未知";
-                store.districtName = "未知";
-                countySet.add("未知");
-    
-                if (!districtMap.has("未知")) {
-                    districtMap.set("未知", "未知");
-                }
+            const { countyName, districtName } = match ? match.groups : { countyName: "未知", districtName: "未知" };
+
+            countySet.add(countyName);
+
+            // 同一個區名可能出現在不同縣市，因此以縣市加區名作為 key
+            const districtKey = `${countyName}${districtName}`;
+            if (!districtMap.has(districtKey)) {
+                districtMap.set(districtKey, { countyName, districtName });
             }
-    
-            return store;
+
+            return { ...store, countyName, districtName };
         });
-    
+
         const countyNameList = Array.from(countySet);
-        const districtNameList = Array.from(districtMap.entries()).map(([districtName, parentCountyName]) => ({
-            parentCountyName,
+        const districtNameList = Array.from(districtMap.values()).map(({ countyName, districtName }) => ({
+            parentCountyName: countyName,
             districtName
         }));
-    
+
         return {
             updatedStoreList,
             countyNameList,
@@ -160,6 +149,7 @@ export default forwardRef((props, ref) => {
         setDistrictDiplyOptionList(districtOptionList.filter(districtOption => districtOption.parentCountyName === newCountyValue))
     }
     const filterWithAddress = () => {
+        resetDisplayData()
         setModalDisplayStoreList(logisticDataList.filter(store => store.StoreAddr.startsWith(`${filterCountyName}${filterDistrictName}`)))
     }
 
@@ -228,7 +218,7 @@ export default forwardRef((props, ref) => {
                                                     {
                                                         Array.isArray(diplayDistrictOptionList)
                                                         && diplayDistrictOptionList.map(district => (
-                                                            <option value={district.districtName} key={district.districtName}>
+                                                            <option value={district.districtName} key={`${district.parentCountyName}${district.districtName}`}>
                                                                 {district.districtName}
                                                             </option>
                                                         ))
