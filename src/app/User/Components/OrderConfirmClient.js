@@ -12,19 +12,19 @@ export default () => {
     const [isLoading, setIsLoading] = useState(true)
     const [isOrderBuilt, setIsOrderBuilt] = useState(false)
     const [orderId, setOrderId] = useState("")
+    const [loadError, setLoadError] = useState("")
     useEffect(() => {
-        if (typeof window !== undefined) {
-            MicroModal.init()
-            updateCartData()
-            getCvsTypeOptions()
-        }
+        MicroModal.init()
+        updateCartData()
+        getCvsTypeOptions()
     }, [])
 
     // 取得購物車資訊
-    const updateCartData = useCallback(() => {
+    const updateCartData = useCallback(async () => {
         LoadingPageShow()
-        if (typeof window !== undefined) {
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/`, {
+        setLoadError("")
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -32,15 +32,20 @@ export default () => {
                     'X-CSRF-Token': localStorage.getItem("csrfToken")
                 }
             })
-                .then(res => res.json())
-                .then(res => {
-                    LoadingPageHide()
-                    setIsLoading(false)
-                    if (res.cart_items) {
-                        setCartTotalPrice(res.total_price)
-                        setCartData(res.cart_items)
-                    }
-                })
+            if (!res.ok) {
+                throw new Error()
+            }
+
+            const result = await res.json()
+            if (result.cart_items) {
+                setCartTotalPrice(result.total_price)
+                setCartData(result.cart_items)
+            }
+        } catch (error) {
+            setLoadError("購物車資料載入失敗，請稍後再試")
+        } finally {
+            LoadingPageHide()
+            setIsLoading(false)
         }
     }, [])
 
@@ -50,19 +55,24 @@ export default () => {
 
     // 取得物流方式選項
     const [cvsTypeOptions, setCvsTypeOptions] = useState([])
-    const getCvsTypeOptions = useCallback(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/logistic/getCvsTypeOptions`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': localStorage.getItem("csrfToken")
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                setCvsTypeOptions(res)
+    const getCvsTypeOptions = useCallback(async () => {
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/logistic/getCvsTypeOptions`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': localStorage.getItem("csrfToken")
+                }
             })
+            if (!res.ok) {
+                throw new Error()
+            }
+
+            setCvsTypeOptions(await res.json())
+        } catch (error) {
+            alertify.alert("", "無法取得超商種類選項，請重新整理頁面")
+        }
     }, [])
 
     const [orderCvsType, setOrderCvsType] = useState("")
@@ -169,8 +179,10 @@ export default () => {
         {isOrderBuilt && <PaymentInfoPage isNewBuilt="true" orderId={orderId}></PaymentInfoPage>}
         <div className="main-content-area">
             <div className="custom-container">
+                {isLoading && <p className="text-center mt-16 text-xl">資料載入中</p>}
+                {(!isLoading && loadError !== "") && <p className="text-center mt-16 text-xl">{loadError}</p>}
                 {
-                    isLoading ? <p className="text-center mt-16 text-xl">資料載入中</p> : <>
+                    (!isLoading && loadError === "") && <>
                         {
                             (Array.isArray(cartData) && cartData.length > 0) ? <>
                                 <div className="section-title my-8">訂單內容確認</div>

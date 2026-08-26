@@ -12,6 +12,7 @@ export default ({ categoryId }) => {
     const [categoryData, setCategoryData] = useState({})
 
     const [dataList, setDataList] = useState([])
+    const [loadError, setLoadError] = useState("")
 
     // 取得資料列表
     useEffect(() => {
@@ -20,34 +21,44 @@ export default ({ categoryId }) => {
 
     const getDataList = useCallback(async () => {
         setIsLoading(true)
+        setLoadError("")
         const urlQuery = categoryId === "All" ? `page=${currentPage}` : `category_id=${categoryId}&page=${currentPage}`
 
         LoadingPageShow()
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/productCategory/getCategoryProduct?${urlQuery}`)
-            .then(res => res.json())
-            .then(res => {
-                if (res.categoryData) {
-                    setCategoryData(res.categoryData)
-                }
-                if (Array.isArray(res.dataList)) {
-                    setDataList(res.dataList)
-                }
-                if (res.lastPage) {
-                    setLastPage(res.lastPage)
-                }
-                if (res.pageList) {
-                    setPageButtonList(res.pageList)
-                }
-                LoadingPageHide()
-                setIsLoading(false)
-            })
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/productCategory/getCategoryProduct?${urlQuery}`)
+            if (!res.ok) {
+                throw new Error()
+            }
+
+            const result = await res.json()
+            if (result.categoryData) {
+                setCategoryData(result.categoryData)
+            }
+            if (Array.isArray(result.dataList)) {
+                setDataList(result.dataList)
+            }
+            if (result.lastPage) {
+                setLastPage(result.lastPage)
+            }
+            if (result.pageList) {
+                setPageButtonList(result.pageList)
+            }
+        } catch (error) {
+            setLoadError("商品資料載入失敗，請稍後再試")
+        } finally {
+            LoadingPageHide()
+            setIsLoading(false)
+        }
     }, [categoryId, currentPage])
 
     return <>
         <div className="main-content-area">
             <div className="custom-container">
+                {isLoading && <p className="text-center mt-16 text-xl">資料載入中</p>}
+                {(!isLoading && loadError !== "") && <p className="text-center mt-16 text-xl">{loadError}</p>}
                 {
-                    !isLoading && (
+                    (!isLoading && loadError === "") && (
                         <>
                             <div className="section-title my-8">
                                 <span>商品列表</span>{

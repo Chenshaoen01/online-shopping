@@ -10,17 +10,17 @@ export default () => {
     const [isLoading, setIsLoading] = useState(true)
     const [cartTotalPrice, setCartTotalPrice] = useState(0)
     const [cartData, setCartData] = useState([])
+    const [loadError, setLoadError] = useState("")
     const { refreshCart } = useCart()
     useEffect(() => {
-        if (typeof window !== undefined) {
-            updateCartData()
-        }
+        updateCartData()
     }, [])
 
-    const updateCartData = useCallback(() => {
+    const updateCartData = useCallback(async () => {
         LoadingPageShow()
-        if (typeof window !== undefined) {
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/`, {
+        setLoadError("")
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -28,15 +28,20 @@ export default () => {
                     'X-CSRF-Token': localStorage.getItem("csrfToken")
                 }
             })
-                .then(res => res.json())
-                .then(res => {
-                    LoadingPageHide()
-                    setIsLoading(false)
-                    if (res.cart_items) {
-                        setCartTotalPrice(res.total_price)
-                        setCartData(res.cart_items)
-                    }
-                })
+            if (!res.ok) {
+                throw new Error()
+            }
+
+            const result = await res.json()
+            if (result.cart_items) {
+                setCartTotalPrice(result.total_price)
+                setCartData(result.cart_items)
+            }
+        } catch (error) {
+            setLoadError("購物車資料載入失敗，請稍後再試")
+        } finally {
+            LoadingPageHide()
+            setIsLoading(false)
         }
     }, [])
 
@@ -53,10 +58,10 @@ export default () => {
         ).set('labels', { ok: '確認', cancel: '取消' });
     }
 
-    const deleteCartItem = (deleteCartItemId) => {
+    const deleteCartItem = async (deleteCartItemId) => {
         LoadingPageShow()
-        if (typeof window !== undefined) {
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/items/${deleteCartItemId}`, {
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/items/${deleteCartItemId}`, {
                 method: 'DELETE',
                 credentials: 'include',
                 headers: {
@@ -64,20 +69,23 @@ export default () => {
                     'X-CSRF-Token': localStorage.getItem("csrfToken")
                 }
             })
-                .then(res => {
-                    LoadingPageHide()
-                    if (!res.ok) {
-                        if (res.status === 401) {
-                            alertify.alert("", "購物車品項刪除失敗：尚未登入")
-                        } else {
-                            alertify.alert("", "購物車品項刪除失敗")
-                        }
-                        return
-                    }
-                    alertify.alert("", "購物車品項刪除成功")
-                    updateCartData()
-                    refreshCart()
-                })
+
+            if (!res.ok) {
+                if (res.status === 401) {
+                    alertify.alert("", "購物車品項刪除失敗：尚未登入")
+                } else {
+                    alertify.alert("", "購物車品項刪除失敗")
+                }
+                return
+            }
+
+            alertify.alert("", "購物車品項刪除成功")
+            await updateCartData()
+            refreshCart()
+        } catch (error) {
+            alertify.alert("", "購物車品項刪除失敗，請確認網路連線")
+        } finally {
+            LoadingPageHide()
         }
     }
 
@@ -85,8 +93,10 @@ export default () => {
         <div className="main-content-area">
             <div className="custom-container">
                 <div className="section-title my-8">我的購物車</div>
+                {isLoading && <p className="text-center mt-16 text-xl">資料載入中</p>}
+                {(!isLoading && loadError !== "") && <p className="text-center mt-16 text-xl">{loadError}</p>}
                 {
-                    isLoading ? <p className="text-center mt-16 text-xl">資料載入中</p> : <>
+                    (!isLoading && loadError === "") && <>
                         {
                             (Array.isArray(cartData) && cartData.length > 0) ? (
                                 <>
