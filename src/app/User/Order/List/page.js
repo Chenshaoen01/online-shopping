@@ -1,16 +1,9 @@
 import Link from "next/link"
 import Navbar from "@/components/Navbar";
-import { cookies } from "next/headers";
+import { serverFetchWithCookie } from "@/api/server";
 
 export default async () => {
-    const cookieHeader = cookies().toString()
-    const userOrderList = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order/userOrders`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-            'Cookie': cookieHeader
-        }
-    })
+    const userOrderList = await serverFetchWithCookie('/order/userOrders')
         .then(res => res.json())
 
     return <>

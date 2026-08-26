@@ -3,6 +3,7 @@ import FAQComponent from "@/components/FAQComponent";
 import BannerCarousel from "@/components/BannerCarousel";
 import ProductCarousel from "@/components/ProductCarousel"
 import Link from 'next/link';
+import { serverFetch } from "@/api/server";
 export default async function Home() {
   const categoryDataList = [
     {
@@ -26,11 +27,11 @@ export default async function Home() {
   ]
 
 
-  const recommendedProducts = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/getRecommendedProducts`, { cache: "no-cache" }).then(res => res.json())
+  const recommendedProducts = await serverFetch('/product/getRecommendedProducts', { cache: "no-cache" }).then(res => res.json())
 
-  const bannerList = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/banner/getAll`, { cache: "no-cache" })
+  const bannerList = await serverFetch('/banner/getAll', { cache: "no-cache" })
     .then(res => res.json())
-  const questionList = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/question/getTopThree`, { cache: "no-cache" })
+  const questionList = await serverFetch('/question/getTopThree', { cache: "no-cache" })
     .then(res => res.json())
 
   return <>

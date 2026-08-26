@@ -1,8 +1,9 @@
 import Navbar from "@/components/Navbar";
 import FAQComponent from "@/components/FAQComponent";
+import { serverFetch } from "@/api/server";
 
 export default async () => {
-    const questionList = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/question/getAll`, { cache: "no-cache" })
+    const questionList = await serverFetch('/question/getAll', { cache: "no-cache" })
         .then(res => res.json())
 
     return <>

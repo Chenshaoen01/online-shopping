@@ -1,7 +1,8 @@
 import Navbar from "@/components/Navbar";
+import { serverFetch } from "@/api/server";
 
 export default async () => {
-    const aboutContent = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/param/about`, {cache: "no-cache"})
+    const aboutContent = await serverFetch('/param/about', {cache: "no-cache"})
     .then(res => res.json())
     .catch(err => console.log(err))
     return <>

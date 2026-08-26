@@ -1,25 +1,17 @@
 import Navbar from "@/components/Navbar";
 import ProductCarousel from "@/components/ProductCarousel"
-import { cookies } from "next/headers";
 import ProductImgArea from "../../Components/ProductImgArea";
 import ProductInfo from "../../Components/ProductInfo";
 import { LoadingPage } from "@/components/LoadingPage";
 import { notFound } from "next/navigation";
+import { serverFetch, checkLogin } from "@/api/server";
 
 export default async ({ params }) => {
-    const cookieHeader = cookies().toString()
-
     // 同時取得商品資訊、相關商品資訊，並從cookie查詢是否登入
-    const [productRes, relatedProductRes, checkLoginRes] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/${params.id}`, { cache: "no-cache" }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/related/${params.id}`, { cache: "no-cache" }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/checkLogin`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Cookie': cookieHeader
-            }
-        })
+    const [productRes, relatedProductRes, isLogin] = await Promise.all([
+        serverFetch(`/product/${params.id}`, { cache: "no-cache" }),
+        serverFetch(`/product/related/${params.id}`, { cache: "no-cache" }),
+        checkLogin()
     ])
 
     if (!productRes.ok) {
@@ -29,7 +21,6 @@ export default async ({ params }) => {
     const productData = await productRes.json()
     const productSubImgList = Array.isArray(productData.images) ? productData.images.map(productImage => productImage.product_img) : []
     const relatedProductData = relatedProductRes.ok ? await relatedProductRes.json() : []
-    const isLogin = checkLoginRes.status === 200
 
     return <>
         <Navbar></Navbar>
