@@ -2,9 +2,11 @@
 import { useState, useCallback } from "react"
 import alertify from "alertifyjs"
 import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
+import { useCart } from '@/components/CartContext';
 
 export default ({ productData, isLoginDefault }) => {
     const [isLogin, setIsLogin] = useState(isLoginDefault)
+    const { refreshCart } = useCart()
     const [purchaseQuantity, setPurchaseQuantity] = useState(1)
     const [selectedModelId, setSelectedModelId] = useState("")
     const [selectedProductPrice, setSelectedProductPrice] = useState(productData?.product_price)
@@ -72,20 +74,21 @@ export default ({ productData, isLoginDefault }) => {
                     } else {
                         alertify.alert("", "商品加入購物車失敗")
                     }
-                    return new Promise.reject(new Error("商品加入購物車失敗"))
+                    return Promise.reject(new Error("商品加入購物車失敗"))
                 }
                 LoadingPageHide()
                 return res.json()
             })
             .then(data => {
                 LoadingPageHide()
+                refreshCart()
                 alertify.alert("", "商品已加入購物車")
             })
             .catch(error => {
                 LoadingPageHide()
                 console.error(error);
             });
-    }, [selectedModelId, purchaseQuantity])
+    }, [selectedModelId, purchaseQuantity, refreshCart])
 
     return <>
         <div className="flex flex-col">

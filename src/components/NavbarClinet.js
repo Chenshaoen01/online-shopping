@@ -2,44 +2,29 @@
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
 import { useEffect, useState, useCallback } from "react"
+import { useCart } from "./CartContext"
 
 export default ({ isLoginDefalut }) => {
 
     const router = useRouter()
     const [isMobileNavbarExpanded, setIsMobileNavbarExpanded] = useState(false)
-    const [cartData, setCartData] = useState({})
     const [isLogin, setIsLogin] = useState(isLoginDefalut)
-    useEffect(() => {
-        if (isLogin && typeof window !== undefined) {
-            getUserCart()
-        }
-    }, [])
+    const { cartData, refreshCart } = useCart()
 
-    const getUserCart = useCallback(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
+    useEffect(() => {
+        if (!isLogin) {
+            return
+        }
+
+        let cancelled = false
+        refreshCart().then(status => {
+            if (!cancelled && status === 401) {
+                setIsLogin(false)
             }
         })
-            .then(res => {
-                if(!res.ok) {
-                    setIsLogin(false)
-                    return new Promise.reject(new Error())
-                }
-                return res.json()
-            })
-            .then(res => {
-                setCartData(res)
-                setTimeout(() => {
-                    getUserCart()
-                }, 2000)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }, []) 
+
+        return () => { cancelled = true }
+    }, [isLogin, refreshCart])
 
     const logOut = useCallback(() => {
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, {

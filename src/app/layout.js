@@ -1,4 +1,5 @@
 import Footer from "@/components/Footer";
+import { CartProvider } from "@/components/CartContext";
 import "./globals.css";
 import "./alertify.min.css";
 import "./micromodal.css";
@@ -15,7 +16,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="main-body">
-        {children}
+        <CartProvider>
+          {children}
+        </CartProvider>
         <Footer></Footer>
       </body>
     </html>

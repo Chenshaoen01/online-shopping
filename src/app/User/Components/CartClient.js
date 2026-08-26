@@ -4,11 +4,13 @@ import Link from "next/link";
 
 import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
 import alertify from 'alertifyjs';
+import { useCart } from '@/components/CartContext';
 
 export default () => {
     const [isLoading, setIsLoading] = useState(true)
     const [cartTotalPrice, setCartTotalPrice] = useState(0)
     const [cartData, setCartData] = useState([])
+    const { refreshCart } = useCart()
     useEffect(() => {
         if (typeof window !== undefined) {
             updateCartData()
@@ -74,6 +76,7 @@ export default () => {
                     }
                     alertify.alert("", "購物車品項刪除成功")
                     updateCartData()
+                    refreshCart()
                 })
         }
     }
