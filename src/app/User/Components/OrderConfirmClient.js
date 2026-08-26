@@ -118,7 +118,7 @@ export default () => {
         const rquiredInvalidColumnList = RequiredColvalidate();
         const phoneNumRegexInvalidString = phoneNumRegexValidate()
 
-        if (rquiredInvalidColumnList.length > 0) {
+        if (rquiredInvalidColumnList.length > 0 || phoneNumRegexInvalidString !== "") {
             const inValidStringList = []
 
             if (rquiredInvalidColumnList.length > 0) {
@@ -132,27 +132,36 @@ export default () => {
             alertify.alert("", inValidString);
         } else {
             LoadingPageShow()
-            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order`, {
-                method: 'POST',
-                credentials: 'include',
-                body: JSON.stringify({
-                    storeId: selectedStore.StoreId,
-                    storeName: selectedStore.StoreName,
-                    csvType: orderCvsType,
-                    receiverName: receiverName,
-                    receiverPhone: receiverPhone
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-Token': localStorage.getItem("csrfToken")
-                }
-            })
-                .then(res => res.json())
-                .then(res => {
-                    setIsOrderBuilt(true)
-                    setOrderId(res.orderId)
-                    LoadingPageHide()
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        storeId: selectedStore.StoreId,
+                        storeName: selectedStore.StoreName,
+                        csvType: orderCvsType,
+                        receiverName: receiverName,
+                        receiverPhone: receiverPhone
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': localStorage.getItem("csrfToken")
+                    }
                 })
+                const result = await res.json().catch(() => ({}))
+
+                if (!res.ok) {
+                    alertify.alert("", result.message ? result.message : "訂單建立失敗")
+                    return
+                }
+
+                setIsOrderBuilt(true)
+                setOrderId(result.orderId)
+            } catch (error) {
+                alertify.alert("", "訂單建立失敗，請確認網路連線")
+            } finally {
+                LoadingPageHide()
+            }
         }
     }, [orderCvsType, selectedStore, receiverName, receiverPhone])
 
