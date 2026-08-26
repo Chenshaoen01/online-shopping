@@ -1,6 +1,7 @@
 "use client";
 import PaymentInfoPage from "@/components/PaymentInfoPage";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { apiFetch } from "@/api/client";
 
 export default ({orderData}) => {
     const [isPaymentInfoShow, setIsPaymentInfoShow] = useState(false)
@@ -11,19 +12,12 @@ export default ({orderData}) => {
 
     // 取得物流方式選項
     const [cvsTypeOptions, setCvsTypeOptions] = useState([])
-    const getCvsTypeOptions = useCallback(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/logistic/getCvsTypeOptions`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': localStorage.getItem("csrfToken")
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                setCvsTypeOptions(res)
-            })
+    const getCvsTypeOptions = useCallback(async () => {
+        try {
+            setCvsTypeOptions(await apiFetch('/logistic/getCvsTypeOptions'))
+        } catch (error) {
+            setCvsTypeOptions([])
+        }
     }, [])
 
     // 取得物流方式名稱

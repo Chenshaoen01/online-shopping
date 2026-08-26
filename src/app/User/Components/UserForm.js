@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import alertify from 'alertifyjs';
 import { LoadingPage, LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
+import { apiFetch } from '@/api/client';
 
 export default function Login({ pageType }) {
     const router = useRouter();
@@ -87,27 +88,18 @@ export default function Login({ pageType }) {
         } else {
             try {
                 LoadingPageShow()
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, {
+                await apiFetch('/users/register', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ user_name: name, user_email: email, user_tel: tel, user_password: password }),
-                    credentials: 'include', // 讓 Cookie 隨請求發送
+                    body: { user_name: name, user_email: email, user_tel: tel, user_password: password }
                 });
-                LoadingPageHide()
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    alertify.alert("", errorData.message);
-                    return;
-                }
 
                 alertify.alert("", "註冊成功").set('closable', true);
                 setTimeout(() => {
                     router.push("/User/Login");
                 }, 2000)
             } catch (error) {
+                alertify.alert("", error.message ? error.message : "註冊失敗");
+            } finally {
                 LoadingPageHide()
             }
         }
@@ -122,31 +114,20 @@ export default function Login({ pageType }) {
         } else {
             try {
                 LoadingPageShow()
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
+                const successData = await apiFetch('/users/login', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ user_email: email, user_password: password }),
-                    credentials: 'include',
+                    body: { user_email: email, user_password: password }
                 })
-                LoadingPageHide()
 
-                if (response.ok) {
-                    const sucessData = await response.json();
-                    localStorage.setItem("csrfToken", sucessData.csrfToken)
-                    handleLocalStorageData()
-                    setTimeout(() => {
-                        router.push("/User/Login/LoginSuccess");
-                    }, 2000)
-                } else {
-                    const errorData = await response.json();
-                    alertify.alert("", errorData.message);
-                    return;
-                }
+                localStorage.setItem("csrfToken", successData.csrfToken)
+                handleLocalStorageData()
+                setTimeout(() => {
+                    router.push("/User/Login/LoginSuccess");
+                }, 2000)
             } catch (error) {
+                alertify.alert("", error.message ? error.message : "登入失敗");
+            } finally {
                 LoadingPageHide()
-                console.error(error);
             }
         }
     }, [isRemember, email, password])

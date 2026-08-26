@@ -1,4 +1,6 @@
 "use client"
+import { apiUrl } from "@/api/client"
+
 export default ({orderId, isNewBuilt}) => {
     return <div id="order-built-info-page" className="order-built-info-page">
         <div className="order-built-info-area">
@@ -15,7 +17,7 @@ export default ({orderId, isNewBuilt}) => {
                     <p><span className="title-md">有效月/年</span>任意大於現在當下時間的月/年</p>
                 </div>
                 <button type="button" className="button-md button-dark" onClick={() => {
-                    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/ecpayment?orderId=${orderId}`
+                    window.location.href = apiUrl(`/ecpayment?orderId=${orderId}`)
                 }}>前往付款</button>
             </div>
         </div>

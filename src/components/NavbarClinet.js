@@ -3,6 +3,8 @@ import Link from "next/link"
 import { useRouter } from 'next/navigation'
 import { useEffect, useState, useCallback } from "react"
 import { useCart } from "./CartContext"
+import { apiFetch } from "@/api/client"
+import alertify from "alertifyjs"
 
 export default ({ isLoginDefalut }) => {
 
@@ -26,20 +28,15 @@ export default ({ isLoginDefalut }) => {
         return () => { cancelled = true }
     }, [isLogin, refreshCart])
 
-    const logOut = useCallback(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, {
-            method: 'POST',
-            credentials: 'include', // 包含 cookies
-        })
-            .then(res => {
-                if (res.ok) {
-                    localStorage.removeItem("csrfToken")
-                    router.push("/User/Login")
-                } else {
-                    console.error('登出失敗');
-                }
-            })
-    }, [])
+    const logOut = useCallback(async () => {
+        try {
+            await apiFetch('/users/logout', { method: 'POST' })
+            localStorage.removeItem("csrfToken")
+            router.push("/User/Login")
+        } catch (error) {
+            alertify.alert("", error.message ? error.message : "登出失敗")
+        }
+    }, [router])
 
     return <div className={isMobileNavbarExpanded ? "navbar-area-container active" : "navbar-area-container"}
         onClick={() => { setIsMobileNavbarExpanded(false); }}>

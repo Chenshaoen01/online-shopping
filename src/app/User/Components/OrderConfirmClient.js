@@ -5,6 +5,8 @@ import LogicticModal from "./LogicticModal";
 import PaymentInfoPage from "@/components/PaymentInfoPage";
 import MicroModal from "micromodal"
 import alertify from "alertifyjs";
+import { apiFetch } from "@/api/client";
+import { backgroundImage } from "@/api/files";
 
 export default () => {
     const [cartTotalPrice, setCartTotalPrice] = useState(0)
@@ -24,19 +26,7 @@ export default () => {
         LoadingPageShow()
         setLoadError("")
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-Token': localStorage.getItem("csrfToken")
-                }
-            })
-            if (!res.ok) {
-                throw new Error()
-            }
-
-            const result = await res.json()
+            const result = await apiFetch('/cart/', { method: 'POST' })
             if (result.cart_items) {
                 setCartTotalPrice(result.total_price)
                 setCartData(result.cart_items)
@@ -57,19 +47,7 @@ export default () => {
     const [cvsTypeOptions, setCvsTypeOptions] = useState([])
     const getCvsTypeOptions = useCallback(async () => {
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/logistic/getCvsTypeOptions`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-Token': localStorage.getItem("csrfToken")
-                }
-            })
-            if (!res.ok) {
-                throw new Error()
-            }
-
-            setCvsTypeOptions(await res.json())
+            setCvsTypeOptions(await apiFetch('/logistic/getCvsTypeOptions'))
         } catch (error) {
             alertify.alert("", "無法取得超商種類選項，請重新整理頁面")
         }
@@ -143,32 +121,21 @@ export default () => {
         } else {
             LoadingPageShow()
             try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order`, {
+                const result = await apiFetch('/order', {
                     method: 'POST',
-                    credentials: 'include',
-                    body: JSON.stringify({
+                    body: {
                         storeId: selectedStore.StoreId,
                         storeName: selectedStore.StoreName,
                         csvType: orderCvsType,
                         receiverName: receiverName,
                         receiverPhone: receiverPhone
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-Token': localStorage.getItem("csrfToken")
                     }
                 })
-                const result = await res.json().catch(() => ({}))
-
-                if (!res.ok) {
-                    alertify.alert("", result.message ? result.message : "訂單建立失敗")
-                    return
-                }
 
                 setIsOrderBuilt(true)
                 setOrderId(result.orderId)
             } catch (error) {
-                alertify.alert("", "訂單建立失敗，請確認網路連線")
+                alertify.alert("", error.message ? error.message : "訂單建立失敗")
             } finally {
                 LoadingPageHide()
             }
@@ -192,7 +159,7 @@ export default () => {
                                             Array.isArray(cartData) && cartData.map(cartItem => (
                                                 <div className={`shopping-content-item ${!(cartItem.is_active === 1) && "not-active"}`}
                                                     key={cartItem.cart_item_id}>
-                                                    <div className="shopping-content-item-image" style={{ backgroundImage: (cartItem.product_img === "" || cartItem.product_img === null || cartItem.product_img === undefined) ? `url('/no-image.png')` : `url('${process.env.NEXT_PUBLIC_FILE_URL}/${cartItem.product_img}')` }}></div>
+                                                    <div className="shopping-content-item-image" style={backgroundImage(cartItem.product_img)}></div>
                                                     <div className="w-full flex items-top justify-start">
                                                         <div className="shopping-content-item-info">
                                                             <p className="font-bold text-xl mb-1">{cartItem.product_name}</p>

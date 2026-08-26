@@ -1,10 +1,12 @@
 "use client";
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link";
+import { backgroundImage } from '@/api/files';
 
 import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
 import alertify from 'alertifyjs';
 import { useCart } from '@/components/CartContext';
+import { apiFetch } from '@/api/client';
 
 export default () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -20,19 +22,7 @@ export default () => {
         LoadingPageShow()
         setLoadError("")
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-Token': localStorage.getItem("csrfToken")
-                }
-            })
-            if (!res.ok) {
-                throw new Error()
-            }
-
-            const result = await res.json()
+            const result = await apiFetch('/cart/', { method: 'POST' })
             if (result.cart_items) {
                 setCartTotalPrice(result.total_price)
                 setCartData(result.cart_items)
@@ -61,29 +51,12 @@ export default () => {
     const deleteCartItem = async (deleteCartItemId) => {
         LoadingPageShow()
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/items/${deleteCartItemId}`, {
-                method: 'DELETE',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-Token': localStorage.getItem("csrfToken")
-                }
-            })
-
-            if (!res.ok) {
-                if (res.status === 401) {
-                    alertify.alert("", "購物車品項刪除失敗：尚未登入")
-                } else {
-                    alertify.alert("", "購物車品項刪除失敗")
-                }
-                return
-            }
-
+            await apiFetch(`/cart/items/${deleteCartItemId}`, { method: 'DELETE' })
             alertify.alert("", "購物車品項刪除成功")
             await updateCartData()
             refreshCart()
         } catch (error) {
-            alertify.alert("", "購物車品項刪除失敗，請確認網路連線")
+            alertify.alert("", error.message ? error.message : "購物車品項刪除失敗")
         } finally {
             LoadingPageHide()
         }
@@ -105,7 +78,7 @@ export default () => {
                                             Array.isArray(cartData) && cartData.map(cartItem => (
                                                 <div className={`shopping-content-item ${!(cartItem.is_active === 1) && "not-active"}`}
                                                     key={cartItem.cart_item_id}>
-                                                    <div className="shopping-content-item-image" style={{ backgroundImage: (cartItem.product_img === "" || cartItem.product_img === null || cartItem.product_img === undefined) ? `url('/no-image.png')` : `url('${process.env.NEXT_PUBLIC_FILE_URL}/${cartItem.product_img}')` }}></div>
+                                                    <div className="shopping-content-item-image" style={backgroundImage(cartItem.product_img)}></div>
                                                     <div className="w-full flex flex-col md:flex-row items-top justify-between">
                                                         <div className="shopping-content-item-info">
                                                             <p className="font-bold text-xl mb-1">{cartItem.product_name}</p>

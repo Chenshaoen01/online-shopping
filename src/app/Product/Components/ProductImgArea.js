@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState, useCallback } from "react"
 import MicroModal from 'micromodal';
+import { imageUrl, backgroundImage } from '@/api/files';
 
 export default ({ productSubImgList }) => {
     const [mainImgIndex, setMainImgIndex] = useState(0)
@@ -26,7 +27,7 @@ export default ({ productSubImgList }) => {
         <div className="product-detail-img-area mb-8">
             <div className="product-detail-main-img"
                 onClick={() => MicroModal.show("modal-1")}
-                style={{ backgroundImage: (productSubImgList[mainImgIndex] === "" || productSubImgList[mainImgIndex] === null || productSubImgList[mainImgIndex] === undefined) ? `url('/no-image.png')` : `url('${process.env.NEXT_PUBLIC_FILE_URL}/${productSubImgList[mainImgIndex]}')` }}
+                style={backgroundImage(productSubImgList[mainImgIndex])}
                 data-fancybox>
             </div>
             {
@@ -43,7 +44,7 @@ export default ({ productSubImgList }) => {
                         {
                             productSubImgList.map((subImg, subImgIndex) =>
                                 <div className={subImgClassName(subImgIndex)} key={subImgIndex}
-                                    style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_FILE_URL}/${subImg}')` }}
+                                    style={backgroundImage(subImg)}
                                     onClick={() => { setMainImgIndex(subImgIndex) }}>
                                 </div>
                             )
@@ -61,7 +62,7 @@ export default ({ productSubImgList }) => {
                              aria-label="Close modal" data-micromodal-close>
                              <img className="close-icon" src="/x-circle-fill.svg"></img>
                         </div>
-                        <img className="product-modal-img w-full" src={`${process.env.NEXT_PUBLIC_FILE_URL}/${productSubImgList[mainImgIndex]}`}></img>
+                        <img className="product-modal-img w-full" src={imageUrl(productSubImgList[mainImgIndex])}></img>
                     </main>
                 </div>
             </div>

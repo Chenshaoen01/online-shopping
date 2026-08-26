@@ -1,5 +1,6 @@
 "use client"
 import { createContext, useCallback, useContext, useState } from "react"
+import { apiFetch } from "@/api/client"
 
 const CartContext = createContext(null)
 
@@ -8,23 +9,11 @@ export const CartProvider = ({ children }) => {
 
     const refreshCart = useCallback(async () => {
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-
-            if (!res.ok) {
-                setCartData({})
-                return res.status
-            }
-
-            setCartData(await res.json())
-            return res.status
+            setCartData(await apiFetch('/cart/', { method: 'POST' }))
+            return 200
         } catch (error) {
-            return 0
+            setCartData({})
+            return error.status
         }
     }, [])
 

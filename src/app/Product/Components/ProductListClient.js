@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import ProductCard from "@/components/ProductCard.js";
 import PageButtonGroup from "@/components/PageButtonGroup.js";
 import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
+import { apiFetch } from '@/api/client';
 
 export default ({ categoryId }) => {
     const [isLoading, setIsLoading] = useState(true)
@@ -26,12 +27,7 @@ export default ({ categoryId }) => {
 
         LoadingPageShow()
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/productCategory/getCategoryProduct?${urlQuery}`)
-            if (!res.ok) {
-                throw new Error()
-            }
-
-            const result = await res.json()
+            const result = await apiFetch(`/productCategory/getCategoryProduct?${urlQuery}`)
             if (result.categoryData) {
                 setCategoryData(result.categoryData)
             }

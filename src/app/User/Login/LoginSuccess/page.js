@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from "react"
 import alertify from "alertifyjs"
+import { apiFetch } from "@/api/client"
 
 export default function () {
     const [resultText, setResultText] = useState("登入成功")
@@ -23,27 +24,13 @@ export default function () {
             })
         }
 
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/googleLogin`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({ credential: idToken }),
-        })
-            .then(async res => {
-                const result = await res.json().catch(() => ({}))
-
-                if (!res.ok) {
-                    backToLogin(result.message ? result.message : "google 登入失敗")
-                    return
-                }
-
+        apiFetch('/users/googleLogin', { method: 'POST', body: { credential: idToken } })
+            .then(result => {
                 localStorage.setItem("csrfToken", result.csrfToken)
                 window.location = `${window.location.origin}/`
             })
-            .catch(() => {
-                backToLogin("google 登入失敗")
+            .catch(error => {
+                backToLogin(error.message ? error.message : "google 登入失敗")
             })
     }, [])
 

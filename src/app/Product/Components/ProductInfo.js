@@ -2,6 +2,7 @@
 import { useState, useCallback } from "react"
 import alertify from "alertifyjs"
 import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
+import { apiFetch } from '@/api/client';
 import { useCart } from '@/components/CartContext';
 
 export default ({ productData, isLoginDefault }) => {
@@ -61,32 +62,14 @@ export default ({ productData, isLoginDefault }) => {
 
         LoadingPageShow()
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/items`, {
-                method: 'POST',
-                credentials: 'include',
-                body: JSON.stringify(newCartItemData),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-Token': localStorage.getItem("csrfToken")
-                }
-            })
-
-            if (!res.ok) {
-                if (res.status === 401) {
-                    setIsLogin(false)
-                    alertify.alert("", "商品加入購物車失敗：尚未登入")
-                    return
-                }
-
-                const errorData = await res.json().catch(() => ({}))
-                alertify.alert("", errorData.message ? errorData.message : "商品加入購物車失敗")
-                return
-            }
-
+            await apiFetch('/cart/items', { method: 'POST', body: newCartItemData })
             refreshCart()
             alertify.alert("", "商品已加入購物車")
         } catch (error) {
-            alertify.alert("", "商品加入購物車失敗，請確認網路連線")
+            if (error.status === 401) {
+                setIsLogin(false)
+            }
+            alertify.alert("", error.message ? error.message : "商品加入購物車失敗")
         } finally {
             LoadingPageHide()
         }

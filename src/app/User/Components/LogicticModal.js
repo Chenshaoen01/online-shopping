@@ -2,6 +2,7 @@
 import { useCallback, useState, forwardRef, useImperativeHandle, useEffect, useRef } from "react"
 import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
 import alertify from "alertifyjs";
+import { apiFetch } from "@/api/client";
 
 export default forwardRef((props, ref) => {
     const [logisticDataList, setLogisticDataList] = useState([])
@@ -33,41 +34,7 @@ export default forwardRef((props, ref) => {
                 setFilterDistrictName("")
 
                 // 取得門市資料
-                LoadingPageShow()
-                fetch(`${process.env.NEXT_PUBLIC_API_URL}/logistic/getCheckMacValue`, {
-                    method: 'POST',
-                    credentials: 'include',
-                    body: JSON.stringify({
-                        CvsType: props.orderCvsType
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-Token': localStorage.getItem("csrfToken")
-                    }
-                })
-                    .then(res => res.json())
-                    .then(res => {
-                        LoadingPageHide()
-                        if (res.RtnCode && res.RtnCode === 1 && res.StoreList.length > 0) {
-                            // 取得標註各門市的縣市/鄉鎮市區的資料
-                            const storeListWithCountyAndDistrictName = addCountyAndDistrict(res.StoreList[0].StoreInfo)
-                            setLogisticDataList(storeListWithCountyAndDistrictName.updatedStoreList)
-                            setModalDisplayStoreList(storeListWithCountyAndDistrictName.updatedStoreList)
-                            // 寫入鄉鎮市區選項
-                            setCountyOptionList(storeListWithCountyAndDistrictName.countyNameList)
-                            setDistrictOptionList(storeListWithCountyAndDistrictName.districtNameList)
-                        } else {
-                            setModalDisplayStoreList([])
-                            props.MicroModal.close("logistic-modal")
-                            alertify.alert("", "無法取得門市資料")
-                        }
-                    })
-                    .catch(() => {
-                        setModalDisplayStoreList([])
-                        props.MicroModal.close("logistic-modal")
-                        alertify.alert("", "無法取得門市資料")
-                        LoadingPageHide()
-                    })
+                getLogisticData()
             }
         }
     });
@@ -105,6 +72,35 @@ export default forwardRef((props, ref) => {
             districtNameList
         };
     }, [])
+
+    // 取得門市資料
+    const getLogisticData = async () => {
+        LoadingPageShow()
+        try {
+            const result = await apiFetch('/logistic/getCheckMacValue', {
+                method: 'POST',
+                body: { CvsType: props.orderCvsType }
+            })
+
+            if (result.RtnCode !== 1 || !Array.isArray(result.StoreList) || result.StoreList.length === 0) {
+                throw new Error()
+            }
+
+            // 取得標註各門市的縣市/鄉鎮市區的資料
+            const storeListWithCountyAndDistrictName = addCountyAndDistrict(result.StoreList[0].StoreInfo)
+            setLogisticDataList(storeListWithCountyAndDistrictName.updatedStoreList)
+            setModalDisplayStoreList(storeListWithCountyAndDistrictName.updatedStoreList)
+            // 寫入鄉鎮市區選項
+            setCountyOptionList(storeListWithCountyAndDistrictName.countyNameList)
+            setDistrictOptionList(storeListWithCountyAndDistrictName.districtNameList)
+        } catch (error) {
+            setModalDisplayStoreList([])
+            props.MicroModal.close("logistic-modal")
+            alertify.alert("", "無法取得門市資料")
+        } finally {
+            LoadingPageHide()
+        }
+    }
 
     // 監聽門市清單列表，滾動到底部，顯示接下來 50 筆
     const storeListScroll = useCallback((e) => {
