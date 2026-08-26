@@ -163,8 +163,9 @@ export default function Login({ pageType }) {
         var params = {
             'client_id': '1071950848439-q4vqij748t7qlrvu4uaeunr4pis5mm48.apps.googleusercontent.com',
             'redirect_uri': `${window.location.origin}/User/Login/LoginSuccess`,
-            'response_type': 'token',
-            'scope': 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+            'response_type': 'id_token',
+            'scope': 'openid email profile',
+            'nonce': crypto.randomUUID(),
             'include_granted_scopes': 'true',
             'state': 'pass-through value',
         };
