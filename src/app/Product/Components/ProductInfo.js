@@ -80,7 +80,7 @@ export default function ProductInfo({ productData, isLoginDefault }) {
         <div className="flex flex-col">
             <p className="text-3xl font-bold mb-4">{productData?.product_name}</p>
             <p className="text-2xl font-bold">NT$ {selectedProductPrice}</p>
-            <div className="devider"></div>
+            <div className="divider"></div>
             <div className="flex flex-col mb-6">
                 <p className="text-xl font-bold mb-2">購買數量</p>
                 <input type="number" className="w-full primary-input" min="1" max="999"

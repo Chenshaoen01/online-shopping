@@ -26,7 +26,7 @@ export default function UserForm({ pageType }) {
     }, [pageType])
 
     // 表單驗證
-    const RequiredColvalidate = useCallback(() => {
+    const validateRequiredColumns = useCallback(() => {
         const validateColumn = pageType === "Register" ? [
             { columnState: name, columnChName: "使用者名稱" },
             { columnState: email, columnChName: "電子信箱" },
@@ -66,15 +66,15 @@ export default function UserForm({ pageType }) {
 
     // 註冊
     const handleRegister = useCallback(async () => {
-        const rquiredInvalidColumnList = RequiredColvalidate();
+        const requiredInvalidColumnList = validateRequiredColumns();
         const emailRegexInvalidString = emailRegexValidate()
         const phoneNumRegexInvalidString = phoneNumRegexValidate()
         const passwordLengthInvalidString = passwordLengthValidate()
 
-        if (rquiredInvalidColumnList.length > 0 || emailRegexInvalidString !== "" || phoneNumRegexInvalidString !== "" || passwordLengthInvalidString !== "") {
+        if (requiredInvalidColumnList.length > 0 || emailRegexInvalidString !== "" || phoneNumRegexInvalidString !== "" || passwordLengthInvalidString !== "") {
             const inValidStringList = []
-            if (rquiredInvalidColumnList.length > 0) {
-                inValidStringList.push(`${rquiredInvalidColumnList.join("、")}為必填項目`)
+            if (requiredInvalidColumnList.length > 0) {
+                inValidStringList.push(`${requiredInvalidColumnList.join("、")}為必填項目`)
             }
             if (emailRegexInvalidString !== "") {
                 inValidStringList.push(emailRegexInvalidString)
@@ -105,7 +105,7 @@ export default function UserForm({ pageType }) {
                 hideLoading()
             }
         }
-    }, [name, email, tel, password, showLoading, hideLoading, router, RequiredColvalidate, emailRegexValidate, phoneNumRegexValidate, passwordLengthValidate])
+    }, [name, email, tel, password, showLoading, hideLoading, router, validateRequiredColumns, emailRegexValidate, phoneNumRegexValidate, passwordLengthValidate])
 
     // 登入後儲存/移除 LocalStorage 的使用者登入資料
     const handleLocalStorageData = useCallback(() => {
@@ -120,7 +120,7 @@ export default function UserForm({ pageType }) {
 
     // 登入
     const handleLogin = useCallback(async () => {
-        const inValidColumnList = RequiredColvalidate();
+        const inValidColumnList = validateRequiredColumns();
         if (inValidColumnList.length > 0) {
             const inValidString = inValidColumnList.join("、");
             alertify.alert("", `${inValidString}為必填項目`);
@@ -143,7 +143,7 @@ export default function UserForm({ pageType }) {
                 hideLoading()
             }
         }
-    }, [email, password, showLoading, hideLoading, router, RequiredColvalidate, handleLocalStorageData])
+    }, [email, password, showLoading, hideLoading, router, validateRequiredColumns, handleLocalStorageData])
 
     // google 登入
     const googleLogIn = useCallback(() => {

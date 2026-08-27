@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/api/client";
 import { formatDate } from "@/utils/date";
 
-export default function OrderDatailClient({orderData}) {
+export default function OrderDetailClient({orderData}) {
     const [isPaymentInfoShow, setIsPaymentInfoShow] = useState(false)
 
     // 取得物流方式選項

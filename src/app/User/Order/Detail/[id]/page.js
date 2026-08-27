@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import { notFound } from "next/navigation";
 import { serverFetchWithCookie } from "@/api/server";
-import OrderDatailClient from "@/app/User/Components/OrderDatailClient";
+import OrderDetailClient from "@/app/User/Components/OrderDetailClient";
 
 export const metadata = {
     title: "訂單明細"
@@ -18,6 +18,6 @@ export default async function OrderDetailPage({ params }) {
 
     return <>
         <Navbar></Navbar>
-        <OrderDatailClient orderData={orderData}></OrderDatailClient>
+        <OrderDetailClient orderData={orderData}></OrderDetailClient>
     </>
 }

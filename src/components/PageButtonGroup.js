@@ -1,7 +1,7 @@
 'use client'
 export default function PageButtonGroup({ lastPage, pageButtonList, currentPage, setCurrentPage }) {
     return <>
-        <div className="main-conteant-footer">
+        <div className="main-content-footer">
             <div className="flex items-center">
                 {currentPage > 1 && <button type="button" className="page-button page-button-pre"
                     onClick={() => { setCurrentPage(currentPage - 1) }}></button>}

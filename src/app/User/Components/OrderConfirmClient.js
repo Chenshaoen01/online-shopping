@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from "react"
 import { useLoading } from '@/components/LoadingProvider';
-import LogicticModal from "./LogicticModal";
+import LogisticModal from "./LogisticModal";
 import PaymentInfoPage from "@/components/PaymentInfoPage";
 import MicroModal from "micromodal"
 import alertify from "alertifyjs";
@@ -78,7 +78,7 @@ export default function OrderConfirmClient() {
     }, [])
 
     //表單驗證
-    const RequiredColvalidate = useCallback(() => {
+    const validateRequiredColumns = useCallback(() => {
         const validateColumn = [
             { columnState: selectedStore.StoreId, columnChName: "出貨門市" },
             { columnState: receiverName, columnChName: "收件人姓名" },
@@ -104,14 +104,14 @@ export default function OrderConfirmClient() {
 
     // 送出訂單
     const beforeCreateOrderValidation = useCallback(async () => {
-        const rquiredInvalidColumnList = RequiredColvalidate();
+        const requiredInvalidColumnList = validateRequiredColumns();
         const phoneNumRegexInvalidString = phoneNumRegexValidate()
 
-        if (rquiredInvalidColumnList.length > 0 || phoneNumRegexInvalidString !== "") {
+        if (requiredInvalidColumnList.length > 0 || phoneNumRegexInvalidString !== "") {
             const inValidStringList = []
 
-            if (rquiredInvalidColumnList.length > 0) {
-                inValidStringList.push(`${rquiredInvalidColumnList.join("、")}為必填項目`)
+            if (requiredInvalidColumnList.length > 0) {
+                inValidStringList.push(`${requiredInvalidColumnList.join("、")}為必填項目`)
             }
             if (phoneNumRegexInvalidString !== "") {
                 inValidStringList.push(phoneNumRegexInvalidString)
@@ -141,7 +141,7 @@ export default function OrderConfirmClient() {
                 hideLoading()
             }
         }
-    }, [orderCvsType, selectedStore, receiverName, receiverPhone, showLoading, hideLoading, RequiredColvalidate, phoneNumRegexValidate])
+    }, [orderCvsType, selectedStore, receiverName, receiverPhone, showLoading, hideLoading, validateRequiredColumns, phoneNumRegexValidate])
 
     return <>
         {isOrderBuilt && <PaymentInfoPage isNewBuilt orderId={orderId}></PaymentInfoPage>}
@@ -234,10 +234,10 @@ export default function OrderConfirmClient() {
                 }
             </div>
 
-            <LogicticModal ref={logisticModalRef}
+            <LogisticModal ref={logisticModalRef}
                 orderCvsType={orderCvsType}
                 setSelectedStore={setSelectedStore}
-                MicroModal={MicroModal}></LogicticModal>
+                MicroModal={MicroModal}></LogisticModal>
         </div>
     </>
 }

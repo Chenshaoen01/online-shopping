@@ -7,11 +7,11 @@ import { useCart } from "./CartContext"
 import { apiFetch } from "@/api/client"
 import alertify from "alertifyjs"
 
-export default function NavbarClinet({ isLoginDefalut }) {
+export default function NavbarClient({ isLoginDefault }) {
 
     const router = useRouter()
     const [isMobileNavbarExpanded, setIsMobileNavbarExpanded] = useState(false)
-    const [isLogin, setIsLogin] = useState(isLoginDefalut)
+    const [isLogin, setIsLogin] = useState(isLoginDefault)
     const { cartData, refreshCart } = useCart()
 
     useEffect(() => {

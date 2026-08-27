@@ -4,7 +4,7 @@ import { useLoading } from '@/components/LoadingProvider';
 import alertify from "alertifyjs";
 import { apiFetch } from "@/api/client";
 
-export default forwardRef(function LogicticModal({ orderCvsType, setSelectedStore, MicroModal }, ref) {
+export default forwardRef(function LogisticModal({ orderCvsType, setSelectedStore, MicroModal }, ref) {
     const [logisticDataList, setLogisticDataList] = useState([])
     const [modalDisplayStoreList, setModalDisplayStoreList] = useState([])
     const [modalDisplayStoreListPage, setModalDisplayStoreListPage] = useState(1)
@@ -12,7 +12,7 @@ export default forwardRef(function LogicticModal({ orderCvsType, setSelectedStor
     
     const [countyOptionList, setCountyOptionList] = useState([])
     const [districtOptionList, setDistrictOptionList] = useState([])
-    const [diplayDistrictOptionList, setDistrictDiplyOptionList] = useState([])
+    const [displayDistrictOptionList, setDisplayDistrictOptionList] = useState([])
     const [filterMode, setFilterMode] = useState("StoreName")
     const { showLoading, hideLoading } = useLoading()
 
@@ -30,7 +30,7 @@ export default forwardRef(function LogicticModal({ orderCvsType, setSelectedStor
                 // 清空縣市/鄉鎮市區篩選條件、選項
                 setCountyOptionList([])
                 setDistrictOptionList([])
-                setDistrictDiplyOptionList([])
+                setDisplayDistrictOptionList([])
                 setFilterCountyName("")
                 setFilterDistrictName("")
 
@@ -143,7 +143,7 @@ export default forwardRef(function LogicticModal({ orderCvsType, setSelectedStor
         setFilterDistrictName("")
 
         resetDisplayData()
-        setDistrictDiplyOptionList(districtOptionList.filter(districtOption => districtOption.parentCountyName === newCountyValue))
+        setDisplayDistrictOptionList(districtOptionList.filter(districtOption => districtOption.parentCountyName === newCountyValue))
     }
     const filterWithAddress = () => {
         resetDisplayData()
@@ -212,8 +212,8 @@ export default forwardRef(function LogicticModal({ orderCvsType, setSelectedStor
                                                     onChange={(e) => { setFilterDistrictName(e.target.value) }}>
                                                     <option value="" disabled>請選擇鄉鎮市區</option>
                                                     {
-                                                        Array.isArray(diplayDistrictOptionList)
-                                                        && diplayDistrictOptionList.map(district => (
+                                                        Array.isArray(displayDistrictOptionList)
+                                                        && displayDistrictOptionList.map(district => (
                                                             <option value={district.districtName} key={`${district.parentCountyName}${district.districtName}`}>
                                                                 {district.districtName}
                                                             </option>
