@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@fancyapps/ui": "^5.0.36",
     "alertifyjs": "^1.14.0",
     "micromodal": "^0.4.10",
     "next": "14.2.11",

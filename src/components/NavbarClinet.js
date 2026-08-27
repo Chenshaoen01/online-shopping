@@ -45,7 +45,7 @@ export default function NavbarClinet({ isLoginDefalut }) {
             onClick={(e) => { e.stopPropagation(); }}>
             <Link className="mx-4 flex items-center" href="/">
                 <Image className="navbar-logo me-2" src="/logo1.png" width={501} height={500} alt=""></Image>
-                <div className="whitespace-nowrap me-4">毛孩物坊{isMobileNavbarExpanded}</div>
+                <div className="whitespace-nowrap me-4">毛孩物坊</div>
             </Link>
             <Image className="navbar-hamburger block lg:hidden me-4" src="/menu-burger.svg" width={24} height={24} alt="選單" unoptimized
                 onClick={() => { setIsMobileNavbarExpanded(!isMobileNavbarExpanded); }}></Image>

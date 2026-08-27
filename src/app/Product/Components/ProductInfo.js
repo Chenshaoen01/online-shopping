@@ -101,7 +101,7 @@ export default function ProductInfo({ productData, isLoginDefault }) {
             <div className="flex flex-col items-center">
                 <button type="button" disabled={!isLogin}
                         className={`mx-auto mt-2 button-light button-large ${!isLogin && "disabled-button"}`}
-                        onClick={() => { validateBeforeAddCart() }}>加入購物車{isLogin}</button>
+                        onClick={() => { validateBeforeAddCart() }}>加入購物車</button>
                 { !isLogin && <p className="mt-4">尚未登入</p> }
             </div>
         </div>

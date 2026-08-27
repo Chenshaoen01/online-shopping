@@ -28,8 +28,7 @@ export default function ProductImgArea({ productSubImgList }) {
         <div className="product-detail-img-area mb-8">
             <div className="product-detail-main-img"
                 onClick={() => MicroModal.show("modal-1")}
-                style={backgroundImage(productSubImgList[mainImgIndex])}
-                data-fancybox>
+                style={backgroundImage(productSubImgList[mainImgIndex])}>
             </div>
             {
                 (Array.isArray(productSubImgList) && productSubImgList.length > 0) && <div className="product-sub-img-area-container mt-4">
