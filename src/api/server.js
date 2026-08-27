@@ -1,3 +1,4 @@
+import { cache } from "react"
 import { cookies } from "next/headers"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
@@ -12,7 +13,7 @@ export const serverFetchWithCookie = (path, options = {}) => fetch(`${API_URL}${
     }
 })
 
-export const checkLogin = async () => {
+export const checkLogin = cache(async () => {
     const res = await serverFetchWithCookie('/users/checkLogin')
     return res.status === 200
-}
+})

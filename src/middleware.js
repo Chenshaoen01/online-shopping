@@ -1,27 +1,14 @@
 import { NextResponse } from "next/server";
 
-export async function middleware(request) {
-    // if(request.nextUrl.pathname.startsWith('/User/Cart') || request.nextUrl.pathname.startsWith('/User/Order')) {
-    //     const jwtToken = request.cookies.get('jwt')
-    //     if(!jwtToken) {
-    //         return NextResponse.redirect(new URL('/User/Login', request.url))
-    //     }
-    //     return NextResponse.next();
-    // }
-
-    if(request.nextUrl.pathname.startsWith('/User/Cart') || request.nextUrl.pathname.startsWith('/User/Order')) {
-        const cookieHeader = request.cookies.toString()
-        const checkLoginResult = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/checkLogin`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Cookie': cookieHeader
-            }
-        })
-
-        if(checkLoginResult.status === 200) {
-            return NextResponse.next();
-        }
+// 只擋掉明顯未登入的請求，實際的身分驗證由 API 負責
+export function middleware(request) {
+    if (!request.cookies.get('jwt')) {
         return NextResponse.redirect(new URL('/User/Login', request.url))
     }
+
+    return NextResponse.next();
+}
+
+export const config = {
+    matcher: ['/User/Cart', '/User/Cart/:path*', '/User/Order', '/User/Order/:path*'],
 }
