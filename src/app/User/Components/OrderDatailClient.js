@@ -2,6 +2,7 @@
 import PaymentInfoPage from "@/components/PaymentInfoPage";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/api/client";
+import { formatDate } from "@/utils/date";
 
 export default function OrderDatailClient({orderData}) {
     const [isPaymentInfoShow, setIsPaymentInfoShow] = useState(false)
@@ -26,17 +27,8 @@ export default function OrderDatailClient({orderData}) {
         return targetCsvTypeOptionIndex !== -1 ? cvsTypeOptions[targetCsvTypeOptionIndex].CvsTypeName : ""
     }, [cvsTypeOptions, orderData.order.csv_type])
 
-    // 轉換日期格式
-    const getDateString = (dateTime) => {
-        const date = new Date(dateTime);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        return `${year}/${month}/${day}`;
-    }
-
     return <>
-        {isPaymentInfoShow && <PaymentInfoPage isNewBuilt="false" orderId={orderData.order.order_id}></PaymentInfoPage>}
+        {isPaymentInfoShow && <PaymentInfoPage isNewBuilt={false} orderId={orderData.order.order_id}></PaymentInfoPage>}
         <div className="main-content-area">
             <div className="custom-container">
                 {/* 訂單基本資料 */}
@@ -49,7 +41,7 @@ export default function OrderDatailClient({orderData}) {
                     <span className="title-md">訂單金額</span>${orderData.order.total_price}
                 </div>
                 <div className="flex">
-                    <span className="title-md">訂單建立日期</span>{getDateString(orderData.order.created_at)}
+                    <span className="title-md">訂單建立日期</span>{formatDate(orderData.order.created_at)}
                 </div>
                 <div className="flex">
                     <span className="title-md">訂單狀態</span>{orderData.order.order_status}
@@ -88,7 +80,7 @@ export default function OrderDatailClient({orderData}) {
                                     </div>
                                     <div className="flex">
                                         <span className="title-md">小計</span>
-                                        <span>NT$ {parseFloat(orderItem.model_price) * parseFloat(orderItem.quantity)}</span>
+                                        <span>NT$ {Number(orderItem.model_price) * orderItem.quantity}</span>
                                     </div>
                                 </div>
                             </div>

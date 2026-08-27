@@ -80,13 +80,13 @@ export default function ProductListClient({ categoryId }) {
                                     <>
                                         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4">
                                             {
-                                                Array.isArray(dataList) && dataList.map((product, productIndex) =>
-                                                    <ProductCard product={product} key={product.product_id + productIndex} />
+                                                Array.isArray(dataList) && dataList.map(product =>
+                                                    <ProductCard product={product} key={product.product_id} />
                                                 )
                                             }
                                         </div>
                                         <div className="flex justify-center mt-6">
-                                            <PageButtonGroup lastPage={lastPage} pageButtonList={pageButtonList} currentPage={currentPage} setCurrentPage={setCurrentPage} getDataList={getDataList} />
+                                            <PageButtonGroup lastPage={lastPage} pageButtonList={pageButtonList} currentPage={currentPage} setCurrentPage={setCurrentPage} />
                                         </div>
                                     </>
                                 ) : <p className="text-center mt-16 text-xl">查無符合條件的產品</p>

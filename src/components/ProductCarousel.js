@@ -13,8 +13,8 @@ export default function ProductCarousel({productList}) {
         <>
             <div className="hidden lg:grid lg:grid-cols-4 gap-y-4 mt-8 mb-32">
                 {
-                    Array.isArray(productList) && productList.map((product, productIndex) =>
-                       <ProductCard product={product}  key={product.product_id + productIndex}/>
+                    Array.isArray(productList) && productList.map(product =>
+                       <ProductCard product={product} key={product.product_id}/>
                     )
                 }
             </div>
@@ -33,9 +33,9 @@ export default function ProductCarousel({productList}) {
                     modules={[Navigation]}
                     className="mySwiper">
                     {
-                        Array.isArray(productList) && productList.map((product, productIndex) =>
-                            <SwiperSlide key={productIndex}>
-                                <ProductCard product={product}  key={product.product_id + productIndex}/>
+                        Array.isArray(productList) && productList.map(product =>
+                            <SwiperSlide key={product.product_id}>
+                                <ProductCard product={product}/>
                             </SwiperSlide>
                         )
                     }

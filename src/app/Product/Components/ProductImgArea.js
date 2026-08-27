@@ -43,7 +43,7 @@ export default function ProductImgArea({ productSubImgList }) {
                     <div className="product-sub-img-area">
                         {
                             productSubImgList.map((subImg, subImgIndex) =>
-                                <div className={subImgClassName(subImgIndex)} key={subImgIndex}
+                                <div className={subImgClassName(subImgIndex)} key={subImg}
                                     style={backgroundImage(subImg)}
                                     onClick={() => { setMainImgIndex(subImgIndex) }}>
                                 </div>

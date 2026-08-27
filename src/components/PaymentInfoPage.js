@@ -5,7 +5,7 @@ export default function PaymentInfoPage({orderId, isNewBuilt}) {
     return <div id="order-built-info-page" className="order-built-info-page">
         <div className="order-built-info-area">
             {
-                isNewBuilt === 'true' && <div className="text-3xl font-bold mb-4">訂單已建立</div> 
+                isNewBuilt && <div className="text-3xl font-bold mb-4">訂單已建立</div> 
             }
             <div className="order-built-info-box">
                 <div className="section-title mb-8 mt-4 w-full">付款須知</div>

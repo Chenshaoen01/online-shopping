@@ -144,7 +144,7 @@ export default function OrderConfirmClient() {
     }, [orderCvsType, selectedStore, receiverName, receiverPhone, showLoading, hideLoading, RequiredColvalidate, phoneNumRegexValidate])
 
     return <>
-        {isOrderBuilt && <PaymentInfoPage isNewBuilt="true" orderId={orderId}></PaymentInfoPage>}
+        {isOrderBuilt && <PaymentInfoPage isNewBuilt orderId={orderId}></PaymentInfoPage>}
         <div className="main-content-area">
             <div className="custom-container">
                 {isLoading && <p className="text-center mt-16 text-xl">資料載入中</p>}

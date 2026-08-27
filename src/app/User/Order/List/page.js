@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Navbar from "@/components/Navbar";
 import { serverFetchWithCookie } from "@/api/server";
+import { formatDate } from "@/utils/date";
 
 export const metadata = {
     title: "我的訂單"
@@ -19,8 +20,8 @@ export default async function OrderListPage() {
                     (Array.isArray(userOrderList) && userOrderList.length > 0) ? (
                         <div className="flex flex-col">
                             {
-                                userOrderList.map((order, orderIndex) =>
-                                    <div className="flex" key={order.order_id + orderIndex}>
+                                userOrderList.map(order =>
+                                    <div className="flex" key={order.order_id}>
                                         <Link className="order-card mb-6" href={`/User/Order/Detail/${order.order_id}`}>
                                             <div className="flex">
                                                 <span className="title-md">訂單編號</span>
@@ -32,7 +33,7 @@ export default async function OrderListPage() {
                                             </div>
                                             <div className="flex">
                                                 <span className="title-md">訂單建立日期</span>
-                                                <span>{order.created_at}</span>
+                                                <span>{formatDate(order.created_at)}</span>
                                             </div>
                                             <div className="flex">
                                                 <span className="title-md">訂單狀態</span>
