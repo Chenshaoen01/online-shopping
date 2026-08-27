@@ -15,10 +15,6 @@ export default () => {
     const [loadError, setLoadError] = useState("")
     const { refreshCart } = useCart()
     const { showLoading, hideLoading } = useLoading()
-    useEffect(() => {
-        updateCartData()
-    }, [])
-
     const updateCartData = useCallback(async () => {
         showLoading()
         setLoadError("")
@@ -35,6 +31,10 @@ export default () => {
             setIsLoading(false)
         }
     }, [showLoading, hideLoading])
+
+    useEffect(() => {
+        updateCartData()
+    }, [updateCartData])
 
     const deleteConfirm = (deleteCartItemId) => {
         alertify.confirm(

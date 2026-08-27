@@ -16,12 +16,6 @@ export default () => {
     const [orderId, setOrderId] = useState("")
     const [loadError, setLoadError] = useState("")
     const { showLoading, hideLoading } = useLoading()
-    useEffect(() => {
-        MicroModal.init()
-        updateCartData()
-        getCvsTypeOptions()
-    }, [])
-
     // 取得購物車資訊
     const updateCartData = useCallback(async () => {
         showLoading()
@@ -40,10 +34,6 @@ export default () => {
         }
     }, [showLoading, hideLoading])
 
-    // 收件人資料
-    const [receiverName, setReceiverName] = useState("")
-    const [receiverPhone, setReceiverPhone] = useState("")
-
     // 取得物流方式選項
     const [cvsTypeOptions, setCvsTypeOptions] = useState([])
     const getCvsTypeOptions = useCallback(async () => {
@@ -53,6 +43,16 @@ export default () => {
             alertify.alert("", "無法取得超商種類選項，請重新整理頁面")
         }
     }, [])
+
+    useEffect(() => {
+        MicroModal.init()
+        updateCartData()
+        getCvsTypeOptions()
+    }, [updateCartData, getCvsTypeOptions])
+
+    // 收件人資料
+    const [receiverName, setReceiverName] = useState("")
+    const [receiverPhone, setReceiverPhone] = useState("")
 
     const [orderCvsType, setOrderCvsType] = useState("")
     const [selectedStore, setSelectedStore] = useState({
@@ -75,7 +75,7 @@ export default () => {
     const openLogisticModalAndGetData = useCallback(() => {
         logisticModalRef.current.resetModal()
         MicroModal.show("logistic-modal");
-    }, [orderCvsType])
+    }, [])
 
     //表單驗證
     const RequiredColvalidate = useCallback(() => {
@@ -141,7 +141,7 @@ export default () => {
                 hideLoading()
             }
         }
-    }, [orderCvsType, selectedStore, receiverName, receiverPhone, showLoading, hideLoading])
+    }, [orderCvsType, selectedStore, receiverName, receiverPhone, showLoading, hideLoading, RequiredColvalidate, phoneNumRegexValidate])
 
     return <>
         {isOrderBuilt && <PaymentInfoPage isNewBuilt="true" orderId={orderId}></PaymentInfoPage>}
@@ -236,7 +236,6 @@ export default () => {
 
             <LogicticModal ref={logisticModalRef}
                 orderCvsType={orderCvsType}
-                selectedStore={selectedStore}
                 setSelectedStore={setSelectedStore}
                 MicroModal={MicroModal}></LogicticModal>
         </div>

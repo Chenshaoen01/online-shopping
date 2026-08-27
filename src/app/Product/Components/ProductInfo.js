@@ -40,18 +40,7 @@ export default ({ productData, isLoginDefault }) => {
         } else {
             setSelectedProductPrice(productData?.product_price)
         }
-    }, [])
-
-    // 商品加入購物車前，檢查有沒有選款式、填寫數量
-    const validateBeforeAddCart = useCallback(() => {
-        if(purchaseQuantity === "" || purchaseQuantity === null) {
-            alertify.alert("", "請填寫商品數量")
-        } else if (selectedModelId === null || selectedModelId === "" || selectedModelId === undefined) {
-            alertify.alert("", "請選擇商品款式")
-        } else {
-            addCartItem()
-        }
-    }, [selectedModelId, purchaseQuantity])
+    }, [productData])
 
     // 商品加入購物車
     const addCartItem = useCallback(async () => {
@@ -74,7 +63,18 @@ export default ({ productData, isLoginDefault }) => {
         } finally {
             hideLoading()
         }
-    }, [selectedModelId, purchaseQuantity, refreshCart, showLoading, hideLoading])
+    }, [productData.product_id, selectedModelId, purchaseQuantity, refreshCart, showLoading, hideLoading])
+
+    // 商品加入購物車前，檢查有沒有選款式、填寫數量
+    const validateBeforeAddCart = useCallback(() => {
+        if(purchaseQuantity === "" || purchaseQuantity === null) {
+            alertify.alert("", "請填寫商品數量")
+        } else if (selectedModelId === null || selectedModelId === "" || selectedModelId === undefined) {
+            alertify.alert("", "請選擇商品款式")
+        } else {
+            addCartItem()
+        }
+    }, [selectedModelId, purchaseQuantity, addCartItem])
 
     return <>
         <div className="flex flex-col">

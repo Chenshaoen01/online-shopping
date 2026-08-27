@@ -6,10 +6,6 @@ import { apiFetch } from "@/api/client";
 export default ({orderData}) => {
     const [isPaymentInfoShow, setIsPaymentInfoShow] = useState(false)
 
-    useEffect(() => {
-        getCvsTypeOptions()
-    }, [])
-
     // 取得物流方式選項
     const [cvsTypeOptions, setCvsTypeOptions] = useState([])
     const getCvsTypeOptions = useCallback(async () => {
@@ -20,11 +16,15 @@ export default ({orderData}) => {
         }
     }, [])
 
+    useEffect(() => {
+        getCvsTypeOptions()
+    }, [getCvsTypeOptions])
+
     // 取得物流方式名稱
     const csvTypeName = useMemo(() => {
         const targetCsvTypeOptionIndex = cvsTypeOptions.findIndex(option => option.CvsTypeCode === orderData.order.csv_type)
         return targetCsvTypeOptionIndex !== -1 ? cvsTypeOptions[targetCsvTypeOptionIndex].CvsTypeName : ""
-    }, [cvsTypeOptions])
+    }, [cvsTypeOptions, orderData.order.csv_type])
 
     // 轉換日期格式
     const getDateString = (dateTime) => {

@@ -22,7 +22,7 @@ export default function Login({ pageType }) {
             setIsRemember(true)
             setEmail(userEmail)
         }
-    }, [])
+    }, [pageType])
 
     // 表單驗證
     const RequiredColvalidate = useCallback(() => {
@@ -45,7 +45,7 @@ export default function Login({ pageType }) {
         }, [])
 
         return inValidColumnList
-    }, [name, email, tel, password, email, password])
+    }, [pageType, name, email, tel, password])
 
     const emailRegexValidate = useCallback(() => {
         const emailregex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -104,7 +104,18 @@ export default function Login({ pageType }) {
                 hideLoading()
             }
         }
-    }, [name, email, tel, password, showLoading, hideLoading])
+    }, [name, email, tel, password, showLoading, hideLoading, router, RequiredColvalidate, emailRegexValidate, phoneNumRegexValidate, passwordLengthValidate])
+
+    // 登入後儲存/移除 LocalStorage 的使用者登入資料
+    const handleLocalStorageData = useCallback(() => {
+        if (isRemember) {
+            localStorage.setItem("isPetShoppingRemember", true)
+            localStorage.setItem("petShoppingUserEmail", email)
+        } else {
+            localStorage.setItem("isPetShoppingRemember", false)
+            localStorage.setItem("petShoppingUserEmail", "")
+        }
+    }, [isRemember, email])
 
     // 登入
     const handleLogin = useCallback(async () => {
@@ -131,18 +142,7 @@ export default function Login({ pageType }) {
                 hideLoading()
             }
         }
-    }, [isRemember, email, password, showLoading, hideLoading])
-
-    // 登入後儲存/移除 LocalStorage 的使用者登入資料
-    const handleLocalStorageData = useCallback(() => {
-        if (isRemember) {
-            localStorage.setItem("isPetShoppingRemember", true)
-            localStorage.setItem("petShoppingUserEmail", email)
-        } else {
-            localStorage.setItem("isPetShoppingRemember", false)
-            localStorage.setItem("petShoppingUserEmail", "")
-        }
-    }, [isRemember, email])
+    }, [email, password, showLoading, hideLoading, router, RequiredColvalidate, handleLocalStorageData])
 
     // google 登入
     const googleLogIn = useCallback(() => {

@@ -4,7 +4,7 @@ import { useLoading } from '@/components/LoadingProvider';
 import alertify from "alertifyjs";
 import { apiFetch } from "@/api/client";
 
-export default forwardRef((props, ref) => {
+export default forwardRef(({ orderCvsType, setSelectedStore, MicroModal }, ref) => {
     const [logisticDataList, setLogisticDataList] = useState([])
     const [modalDisplayStoreList, setModalDisplayStoreList] = useState([])
     const [modalDisplayStoreListPage, setModalDisplayStoreListPage] = useState(1)
@@ -80,7 +80,7 @@ export default forwardRef((props, ref) => {
         try {
             const result = await apiFetch('/logistic/getCheckMacValue', {
                 method: 'POST',
-                body: { CvsType: props.orderCvsType }
+                body: { CvsType: orderCvsType }
             })
 
             if (result.RtnCode !== 1 || !Array.isArray(result.StoreList) || result.StoreList.length === 0) {
@@ -96,7 +96,7 @@ export default forwardRef((props, ref) => {
             setDistrictOptionList(storeListWithCountyAndDistrictName.districtNameList)
         } catch (error) {
             setModalDisplayStoreList([])
-            props.MicroModal.close("logistic-modal")
+            MicroModal.close("logistic-modal")
             alertify.alert("", "無法取得門市資料")
         } finally {
             hideLoading()
@@ -124,7 +124,7 @@ export default forwardRef((props, ref) => {
     useEffect(() => {
         resetDisplayData()
         setModalDisplayStoreList(logisticDataList)
-    }, [filterMode])
+    }, [filterMode, logisticDataList, resetDisplayData])
 
 
     // 依門市名稱篩選
@@ -152,13 +152,12 @@ export default forwardRef((props, ref) => {
 
     // 點擊門市卡片：選擇該門市、關閉視窗
     const storeCardClick = useCallback((targetLogisticData) => {
-        props.MicroModal.close("logistic-modal")
-        props.setSelectedStore({
-            ...props.selectedStore,
+        MicroModal.close("logistic-modal")
+        setSelectedStore({
             StoreId: targetLogisticData.StoreId,
             StoreName: targetLogisticData.StoreName
         })
-    }, [])
+    }, [MicroModal, setSelectedStore])
 
     return <>
         <div className="modal micromodal-slide logistic-modal" id="logistic-modal" aria-hidden="true">

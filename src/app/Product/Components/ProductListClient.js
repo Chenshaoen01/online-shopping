@@ -16,11 +16,6 @@ export default ({ categoryId }) => {
     const [loadError, setLoadError] = useState("")
     const { showLoading, hideLoading } = useLoading()
 
-    // 取得資料列表
-    useEffect(() => {
-        getDataList()
-    }, [categoryId, currentPage])
-
     const getDataList = useCallback(async () => {
         setIsLoading(true)
         setLoadError("")
@@ -48,6 +43,11 @@ export default ({ categoryId }) => {
             setIsLoading(false)
         }
     }, [categoryId, currentPage, showLoading, hideLoading])
+
+    // 取得資料列表
+    useEffect(() => {
+        getDataList()
+    }, [getDataList])
 
     return <>
         <div className="main-content-area">
