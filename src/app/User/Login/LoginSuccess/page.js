@@ -1,10 +1,11 @@
 'use client'
 import { useEffect, useState } from "react"
-import alertify from "alertifyjs"
+import Link from "next/link"
 import { apiFetch } from "@/api/client"
 
 export default function LoginSuccessPage() {
     const [resultText, setResultText] = useState("登入成功")
+    const [errorMessage, setErrorMessage] = useState("")
 
     useEffect(() => {
         const hashParams = new URLSearchParams(window.location.hash.slice(1))
@@ -17,20 +18,14 @@ export default function LoginSuccessPage() {
             return
         }
 
-        const backToLogin = (message) => {
-            setResultText("登入失敗")
-            alertify.alert("", message, () => {
-                window.location = `${window.location.origin}/User/Login`
-            })
-        }
-
         apiFetch('/users/googleLogin', { method: 'POST', body: { credential: idToken } })
             .then(result => {
                 localStorage.setItem("csrfToken", result.csrfToken)
                 window.location = `${window.location.origin}/`
             })
             .catch(error => {
-                backToLogin(error.message ? error.message : "google 登入失敗")
+                setResultText("登入失敗")
+                setErrorMessage(error.message ? error.message : "google 登入失敗")
             })
     }, [])
 
@@ -38,6 +33,12 @@ export default function LoginSuccessPage() {
         <div className="primary-color-background flex flex-col justify-center items-center">
             <img className="primary-color-background-img me-2" src="/logo1.png"></img>
             <p className="text-3xl font-bold mt-8">{resultText}</p>
+            {
+                errorMessage !== "" && <>
+                    <p className="mt-4">{errorMessage}</p>
+                    <Link className="button-md button-dark mt-8" href="/User/Login">回到登入頁</Link>
+                </>
+            }
         </div>
     </>
 }
