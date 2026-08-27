@@ -1,6 +1,11 @@
 import Navbar from "@/components/Navbar";
 import { serverFetch } from "@/api/server";
 
+export const metadata = {
+    title: "關於我們",
+    description: "認識毛孩物坊。"
+};
+
 export default async function AboutPage() {
     const aboutContent = await serverFetch('/param/about', {cache: "no-cache"})
     .then(res => res.json())

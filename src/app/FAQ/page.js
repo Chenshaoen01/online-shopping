@@ -2,6 +2,11 @@ import Navbar from "@/components/Navbar";
 import FAQComponent from "@/components/FAQComponent";
 import { serverFetch } from "@/api/server";
 
+export const metadata = {
+    title: "常見問答",
+    description: "毛孩物坊的常見問題與解答。"
+};
+
 export default async function FaqPage() {
     const questionList = await serverFetch('/question/getAll', { cache: "no-cache" })
         .then(res => res.json())

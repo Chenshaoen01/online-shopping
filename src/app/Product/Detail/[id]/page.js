@@ -4,6 +4,30 @@ import ProductImgArea from "../../Components/ProductImgArea";
 import ProductInfo from "../../Components/ProductInfo";
 import { notFound } from "next/navigation";
 import { serverFetch, checkLogin } from "@/api/server";
+import { imageUrl } from "@/api/files";
+
+export async function generateMetadata({ params }) {
+    const productRes = await serverFetch(`/product/${params.id}`, { cache: "no-cache" })
+    if (!productRes.ok) {
+        return { title: "找不到商品" }
+    }
+
+    const productData = await productRes.json()
+    const description = productData.product_info ? productData.product_info.slice(0, 100) : ""
+    const firstImage = Array.isArray(productData.images) && productData.images.length > 0
+        ? productData.images[0].product_img
+        : ""
+
+    return {
+        title: productData.product_name,
+        description,
+        openGraph: {
+            title: productData.product_name,
+            description,
+            images: firstImage === "" ? [] : [imageUrl(firstImage)]
+        }
+    }
+}
 
 export default async function ProductDetailPage({ params }) {
     // 同時取得商品資訊、相關商品資訊，並從cookie查詢是否登入
