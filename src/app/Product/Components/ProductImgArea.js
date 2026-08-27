@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react"
 import MicroModal from 'micromodal';
 import { imageUrl, backgroundImage } from '@/api/files';
 
-export default ({ productSubImgList }) => {
+export default function ProductImgArea({ productSubImgList }) {
     const [mainImgIndex, setMainImgIndex] = useState(0)
 
     const subImgOnclick = useCallback((action) => {

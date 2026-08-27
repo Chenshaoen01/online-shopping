@@ -2,7 +2,7 @@ import Link from "next/link"
 import Navbar from "@/components/Navbar";
 import { serverFetchWithCookie } from "@/api/server";
 
-export default async () => {
+export default async function OrderListPage() {
     const userOrderList = await serverFetchWithCookie('/order/userOrders')
         .then(res => res.json())
 

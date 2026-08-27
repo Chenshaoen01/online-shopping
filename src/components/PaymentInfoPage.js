@@ -1,7 +1,7 @@
 "use client"
 import { apiUrl } from "@/api/client"
 
-export default ({orderId, isNewBuilt}) => {
+export default function PaymentInfoPage({orderId, isNewBuilt}) {
     return <div id="order-built-info-page" className="order-built-info-page">
         <div className="order-built-info-area">
             {

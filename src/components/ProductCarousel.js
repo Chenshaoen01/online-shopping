@@ -8,7 +8,7 @@ import 'swiper/css/navigation';
 
 import { Navigation } from 'swiper/modules';
 
-export default function App({productList}) {
+export default function ProductCarousel({productList}) {
     return (
         <>
             <div className="hidden lg:grid lg:grid-cols-4 gap-y-4 mt-8 mb-32">

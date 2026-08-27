@@ -3,7 +3,7 @@ import PaymentInfoPage from "@/components/PaymentInfoPage";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/api/client";
 
-export default ({orderData}) => {
+export default function OrderDatailClient({orderData}) {
     const [isPaymentInfoShow, setIsPaymentInfoShow] = useState(false)
 
     // 取得物流方式選項

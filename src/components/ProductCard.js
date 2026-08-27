@@ -1,6 +1,6 @@
 import Link from "next/link.js";
 import { backgroundImage } from "@/api/files";
-export default ({product}) => {
+export default function ProductCard({product}) {
     return <>
         <div className="flex justify-center">
             <Link className="product-card" href={`/Product/Detail/${product.product_id}`}>

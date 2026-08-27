@@ -5,7 +5,7 @@ import ProductInfo from "../../Components/ProductInfo";
 import { notFound } from "next/navigation";
 import { serverFetch, checkLogin } from "@/api/server";
 
-export default async ({ params }) => {
+export default async function ProductDetailPage({ params }) {
     // 同時取得商品資訊、相關商品資訊，並從cookie查詢是否登入
     const [productRes, relatedProductRes, isLogin] = await Promise.all([
         serverFetch(`/product/${params.id}`, { cache: "no-cache" }),

@@ -5,7 +5,7 @@ import PageButtonGroup from "@/components/PageButtonGroup.js";
 import { useLoading } from '@/components/LoadingProvider';
 import { apiFetch } from '@/api/client';
 
-export default ({ categoryId }) => {
+export default function ProductListClient({ categoryId }) {
     const [isLoading, setIsLoading] = useState(true)
     const [lastPage, setLastPage] = useState(1)
     const [currentPage, setCurrentPage] = useState(1)

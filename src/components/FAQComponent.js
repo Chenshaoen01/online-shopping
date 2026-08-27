@@ -2,7 +2,7 @@
 
 import { useState, useCallback} from "react"
 
-export default ({questionSourceList}) => {
+export default function FAQComponent({questionSourceList}) {
     const [expandedIdList, setExpandedIdList] = useState([])
 
     // 展開/收起問答內容

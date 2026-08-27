@@ -6,7 +6,7 @@ import { useCart } from "./CartContext"
 import { apiFetch } from "@/api/client"
 import alertify from "alertifyjs"
 
-export default ({ isLoginDefalut }) => {
+export default function NavbarClinet({ isLoginDefalut }) {
 
     const router = useRouter()
     const [isMobileNavbarExpanded, setIsMobileNavbarExpanded] = useState(false)

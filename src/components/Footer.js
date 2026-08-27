@@ -1,4 +1,4 @@
-export default () => {
+export default function Footer() {
     return <div className="footer flex flex-col items-center mt-auto">
         <div className="flex items-center mb-2">
             <img className="footer-logo me-2" src="/logo1.png"></img>

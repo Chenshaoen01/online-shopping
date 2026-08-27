@@ -8,7 +8,7 @@ import alertify from "alertifyjs";
 import { apiFetch } from "@/api/client";
 import { backgroundImage } from "@/api/files";
 
-export default () => {
+export default function OrderConfirmClient() {
     const [cartTotalPrice, setCartTotalPrice] = useState(0)
     const [cartData, setCartData] = useState([])
     const [isLoading, setIsLoading] = useState(true)

@@ -8,7 +8,7 @@ import alertify from 'alertifyjs';
 import { useCart } from '@/components/CartContext';
 import { apiFetch } from '@/api/client';
 
-export default () => {
+export default function CartClient() {
     const [isLoading, setIsLoading] = useState(true)
     const [cartTotalPrice, setCartTotalPrice] = useState(0)
     const [cartData, setCartData] = useState([])

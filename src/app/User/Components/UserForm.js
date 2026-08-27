@@ -5,7 +5,7 @@ import alertify from 'alertifyjs';
 import { useLoading } from '@/components/LoadingProvider';
 import { apiFetch } from '@/api/client';
 
-export default function Login({ pageType }) {
+export default function UserForm({ pageType }) {
     const router = useRouter();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");

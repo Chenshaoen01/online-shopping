@@ -8,7 +8,7 @@ import 'swiper/css/navigation';
 
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
-export default function App({bannerSourceList}) {
+export default function BannerCarousel({bannerSourceList}) {
     return (
         <>
             <Swiper 

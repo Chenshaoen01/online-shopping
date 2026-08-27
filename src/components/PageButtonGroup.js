@@ -1,5 +1,5 @@
 'use client'
-export default ({ lastPage, pageButtonList, currentPage, setCurrentPage }) => {
+export default function PageButtonGroup({ lastPage, pageButtonList, currentPage, setCurrentPage }) {
     return <>
         <div className="main-conteant-footer">
             <div className="flex items-center">

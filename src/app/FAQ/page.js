@@ -2,7 +2,7 @@ import Navbar from "@/components/Navbar";
 import FAQComponent from "@/components/FAQComponent";
 import { serverFetch } from "@/api/server";
 
-export default async () => {
+export default async function FaqPage() {
     const questionList = await serverFetch('/question/getAll', { cache: "no-cache" })
         .then(res => res.json())
 

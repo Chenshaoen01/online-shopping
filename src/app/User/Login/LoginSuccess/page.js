@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import alertify from "alertifyjs"
 import { apiFetch } from "@/api/client"
 
-export default function () {
+export default function LoginSuccessPage() {
     const [resultText, setResultText] = useState("登入成功")
 
     useEffect(() => {

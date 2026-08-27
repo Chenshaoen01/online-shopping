@@ -4,7 +4,7 @@ import { useLoading } from '@/components/LoadingProvider';
 import alertify from "alertifyjs";
 import { apiFetch } from "@/api/client";
 
-export default forwardRef(({ orderCvsType, setSelectedStore, MicroModal }, ref) => {
+export default forwardRef(function LogicticModal({ orderCvsType, setSelectedStore, MicroModal }, ref) {
     const [logisticDataList, setLogisticDataList] = useState([])
     const [modalDisplayStoreList, setModalDisplayStoreList] = useState([])
     const [modalDisplayStoreListPage, setModalDisplayStoreListPage] = useState(1)

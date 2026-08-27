@@ -5,7 +5,7 @@ import { useLoading } from '@/components/LoadingProvider';
 import { apiFetch } from '@/api/client';
 import { useCart } from '@/components/CartContext';
 
-export default ({ productData, isLoginDefault }) => {
+export default function ProductInfo({ productData, isLoginDefault }) {
     const [isLogin, setIsLogin] = useState(isLoginDefault)
     const { refreshCart } = useCart()
     const { showLoading, hideLoading } = useLoading()
