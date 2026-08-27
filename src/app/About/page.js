@@ -4,7 +4,6 @@ import { serverFetch } from "@/api/server";
 export default async () => {
     const aboutContent = await serverFetch('/param/about', {cache: "no-cache"})
     .then(res => res.json())
-    .catch(err => console.log(err))
     return <>
         <Navbar></Navbar>
         <div className="main-content-area">
