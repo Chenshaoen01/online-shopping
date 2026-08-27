@@ -2,7 +2,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import alertify from 'alertifyjs';
-import { LoadingPage, LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
+import { useLoading } from '@/components/LoadingProvider';
 import { apiFetch } from '@/api/client';
 
 export default function Login({ pageType }) {
@@ -12,6 +12,7 @@ export default function Login({ pageType }) {
     const [tel, setTel] = useState("");
     const [password, setPassword] = useState("");
     const [isRemember, setIsRemember] = useState(false);
+    const { showLoading, hideLoading } = useLoading();
 
     useEffect(() => {
         const isRemember = localStorage.getItem("isPetShoppingRemember")
@@ -87,7 +88,7 @@ export default function Login({ pageType }) {
             alertify.alert("", inValidString);
         } else {
             try {
-                LoadingPageShow()
+                showLoading()
                 await apiFetch('/users/register', {
                     method: 'POST',
                     body: { user_name: name, user_email: email, user_tel: tel, user_password: password }
@@ -100,10 +101,10 @@ export default function Login({ pageType }) {
             } catch (error) {
                 alertify.alert("", error.message ? error.message : "註冊失敗");
             } finally {
-                LoadingPageHide()
+                hideLoading()
             }
         }
-    }, [name, email, tel, password])
+    }, [name, email, tel, password, showLoading, hideLoading])
 
     // 登入
     const handleLogin = useCallback(async () => {
@@ -113,7 +114,7 @@ export default function Login({ pageType }) {
             alertify.alert("", `${inValidString}為必填項目`);
         } else {
             try {
-                LoadingPageShow()
+                showLoading()
                 const successData = await apiFetch('/users/login', {
                     method: 'POST',
                     body: { user_email: email, user_password: password }
@@ -127,10 +128,10 @@ export default function Login({ pageType }) {
             } catch (error) {
                 alertify.alert("", error.message ? error.message : "登入失敗");
             } finally {
-                LoadingPageHide()
+                hideLoading()
             }
         }
-    }, [isRemember, email, password])
+    }, [isRemember, email, password, showLoading, hideLoading])
 
     // 登入後儲存/移除 LocalStorage 的使用者登入資料
     const handleLocalStorageData = useCallback(() => {
@@ -174,7 +175,6 @@ export default function Login({ pageType }) {
 
     return (
         <>
-            <LoadingPage></LoadingPage>
             <div className="userpage-main-content-area">
                 <div className="grid grid-cols-12">
                     <div className="col-span-7 hidden md:flex">

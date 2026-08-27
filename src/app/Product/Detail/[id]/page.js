@@ -2,7 +2,6 @@ import Navbar from "@/components/Navbar";
 import ProductCarousel from "@/components/ProductCarousel"
 import ProductImgArea from "../../Components/ProductImgArea";
 import ProductInfo from "../../Components/ProductInfo";
-import { LoadingPage } from "@/components/LoadingPage";
 import { notFound } from "next/navigation";
 import { serverFetch, checkLogin } from "@/api/server";
 
@@ -24,7 +23,6 @@ export default async ({ params }) => {
 
     return <>
         <Navbar></Navbar>
-        <LoadingPage></LoadingPage>
         <div className="main-content-area">
             <div className="custom-container">
                 <div className="section-title my-8">商品列表</div>

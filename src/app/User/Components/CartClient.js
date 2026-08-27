@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react"
 import Link from "next/link";
 import { backgroundImage } from '@/api/files';
 
-import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
+import { useLoading } from '@/components/LoadingProvider';
 import alertify from 'alertifyjs';
 import { useCart } from '@/components/CartContext';
 import { apiFetch } from '@/api/client';
@@ -14,12 +14,13 @@ export default () => {
     const [cartData, setCartData] = useState([])
     const [loadError, setLoadError] = useState("")
     const { refreshCart } = useCart()
+    const { showLoading, hideLoading } = useLoading()
     useEffect(() => {
         updateCartData()
     }, [])
 
     const updateCartData = useCallback(async () => {
-        LoadingPageShow()
+        showLoading()
         setLoadError("")
         try {
             const result = await apiFetch('/cart/', { method: 'POST' })
@@ -30,10 +31,10 @@ export default () => {
         } catch (error) {
             setLoadError("購物車資料載入失敗，請稍後再試")
         } finally {
-            LoadingPageHide()
+            hideLoading()
             setIsLoading(false)
         }
-    }, [])
+    }, [showLoading, hideLoading])
 
     const deleteConfirm = (deleteCartItemId) => {
         alertify.confirm(
@@ -49,7 +50,7 @@ export default () => {
     }
 
     const deleteCartItem = async (deleteCartItemId) => {
-        LoadingPageShow()
+        showLoading()
         try {
             await apiFetch(`/cart/items/${deleteCartItemId}`, { method: 'DELETE' })
             alertify.alert("", "購物車品項刪除成功")
@@ -58,7 +59,7 @@ export default () => {
         } catch (error) {
             alertify.alert("", error.message ? error.message : "購物車品項刪除失敗")
         } finally {
-            LoadingPageHide()
+            hideLoading()
         }
     }
 

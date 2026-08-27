@@ -2,7 +2,7 @@
 import { useEffect, useState, useCallback } from "react";
 import ProductCard from "@/components/ProductCard.js";
 import PageButtonGroup from "@/components/PageButtonGroup.js";
-import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
+import { useLoading } from '@/components/LoadingProvider';
 import { apiFetch } from '@/api/client';
 
 export default ({ categoryId }) => {
@@ -14,6 +14,7 @@ export default ({ categoryId }) => {
 
     const [dataList, setDataList] = useState([])
     const [loadError, setLoadError] = useState("")
+    const { showLoading, hideLoading } = useLoading()
 
     // 取得資料列表
     useEffect(() => {
@@ -25,7 +26,7 @@ export default ({ categoryId }) => {
         setLoadError("")
         const urlQuery = categoryId === "All" ? `page=${currentPage}` : `category_id=${categoryId}&page=${currentPage}`
 
-        LoadingPageShow()
+        showLoading()
         try {
             const result = await apiFetch(`/productCategory/getCategoryProduct?${urlQuery}`)
             if (result.categoryData) {
@@ -43,10 +44,10 @@ export default ({ categoryId }) => {
         } catch (error) {
             setLoadError("商品資料載入失敗，請稍後再試")
         } finally {
-            LoadingPageHide()
+            hideLoading()
             setIsLoading(false)
         }
-    }, [categoryId, currentPage])
+    }, [categoryId, currentPage, showLoading, hideLoading])
 
     return <>
         <div className="main-content-area">

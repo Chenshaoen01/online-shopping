@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useState, forwardRef, useImperativeHandle, useEffect, useRef } from "react"
-import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
+import { useLoading } from '@/components/LoadingProvider';
 import alertify from "alertifyjs";
 import { apiFetch } from "@/api/client";
 
@@ -14,6 +14,7 @@ export default forwardRef((props, ref) => {
     const [districtOptionList, setDistrictOptionList] = useState([])
     const [diplayDistrictOptionList, setDistrictDiplyOptionList] = useState([])
     const [filterMode, setFilterMode] = useState("StoreName")
+    const { showLoading, hideLoading } = useLoading()
 
     // 視窗被開啟時重置門市資料/篩選資料
     useImperativeHandle(ref, () => {
@@ -75,7 +76,7 @@ export default forwardRef((props, ref) => {
 
     // 取得門市資料
     const getLogisticData = async () => {
-        LoadingPageShow()
+        showLoading()
         try {
             const result = await apiFetch('/logistic/getCheckMacValue', {
                 method: 'POST',
@@ -98,7 +99,7 @@ export default forwardRef((props, ref) => {
             props.MicroModal.close("logistic-modal")
             alertify.alert("", "無法取得門市資料")
         } finally {
-            LoadingPageHide()
+            hideLoading()
         }
     }
 

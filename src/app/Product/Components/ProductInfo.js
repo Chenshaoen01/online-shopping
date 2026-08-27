@@ -1,13 +1,14 @@
 'use client'
 import { useState, useCallback } from "react"
 import alertify from "alertifyjs"
-import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
+import { useLoading } from '@/components/LoadingProvider';
 import { apiFetch } from '@/api/client';
 import { useCart } from '@/components/CartContext';
 
 export default ({ productData, isLoginDefault }) => {
     const [isLogin, setIsLogin] = useState(isLoginDefault)
     const { refreshCart } = useCart()
+    const { showLoading, hideLoading } = useLoading()
     const [purchaseQuantity, setPurchaseQuantity] = useState(1)
     const [selectedModelId, setSelectedModelId] = useState("")
     const [selectedProductPrice, setSelectedProductPrice] = useState(productData?.product_price)
@@ -60,7 +61,7 @@ export default ({ productData, isLoginDefault }) => {
             quantity: purchaseQuantity
         }
 
-        LoadingPageShow()
+        showLoading()
         try {
             await apiFetch('/cart/items', { method: 'POST', body: newCartItemData })
             refreshCart()
@@ -71,9 +72,9 @@ export default ({ productData, isLoginDefault }) => {
             }
             alertify.alert("", error.message ? error.message : "商品加入購物車失敗")
         } finally {
-            LoadingPageHide()
+            hideLoading()
         }
-    }, [selectedModelId, purchaseQuantity, refreshCart])
+    }, [selectedModelId, purchaseQuantity, refreshCart, showLoading, hideLoading])
 
     return <>
         <div className="flex flex-col">

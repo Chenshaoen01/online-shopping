@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from "react"
-import { LoadingPageShow, LoadingPageHide } from '@/components/LoadingPage';
+import { useLoading } from '@/components/LoadingProvider';
 import LogicticModal from "./LogicticModal";
 import PaymentInfoPage from "@/components/PaymentInfoPage";
 import MicroModal from "micromodal"
@@ -15,6 +15,7 @@ export default () => {
     const [isOrderBuilt, setIsOrderBuilt] = useState(false)
     const [orderId, setOrderId] = useState("")
     const [loadError, setLoadError] = useState("")
+    const { showLoading, hideLoading } = useLoading()
     useEffect(() => {
         MicroModal.init()
         updateCartData()
@@ -23,7 +24,7 @@ export default () => {
 
     // 取得購物車資訊
     const updateCartData = useCallback(async () => {
-        LoadingPageShow()
+        showLoading()
         setLoadError("")
         try {
             const result = await apiFetch('/cart/', { method: 'POST' })
@@ -34,10 +35,10 @@ export default () => {
         } catch (error) {
             setLoadError("購物車資料載入失敗，請稍後再試")
         } finally {
-            LoadingPageHide()
+            hideLoading()
             setIsLoading(false)
         }
-    }, [])
+    }, [showLoading, hideLoading])
 
     // 收件人資料
     const [receiverName, setReceiverName] = useState("")
@@ -119,7 +120,7 @@ export default () => {
             const inValidString = inValidStringList.join("<br>");
             alertify.alert("", inValidString);
         } else {
-            LoadingPageShow()
+            showLoading()
             try {
                 const result = await apiFetch('/order', {
                     method: 'POST',
@@ -137,10 +138,10 @@ export default () => {
             } catch (error) {
                 alertify.alert("", error.message ? error.message : "訂單建立失敗")
             } finally {
-                LoadingPageHide()
+                hideLoading()
             }
         }
-    }, [orderCvsType, selectedStore, receiverName, receiverPhone])
+    }, [orderCvsType, selectedStore, receiverName, receiverPhone, showLoading, hideLoading])
 
     return <>
         {isOrderBuilt && <PaymentInfoPage isNewBuilt="true" orderId={orderId}></PaymentInfoPage>}
