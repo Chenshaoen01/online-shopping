@@ -1,5 +1,6 @@
 "use client"
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter } from 'next/navigation'
 import { useEffect, useState, useCallback } from "react"
 import { useCart } from "./CartContext"
@@ -43,11 +44,11 @@ export default function NavbarClinet({ isLoginDefalut }) {
         <div className="navbar-area justify-between"
             onClick={(e) => { e.stopPropagation(); }}>
             <Link className="mx-4 flex items-center" href="/">
-                <img className="navbar-logo me-2" src="/logo1.png"></img>
+                <Image className="navbar-logo me-2" src="/logo1.png" width={501} height={500} alt=""></Image>
                 <div className="whitespace-nowrap me-4">毛孩物坊{isMobileNavbarExpanded}</div>
             </Link>
-            <img className="navbar-hamburger block lg:hidden me-4" src="/menu-burger.svg"
-                onClick={() => { setIsMobileNavbarExpanded(!isMobileNavbarExpanded); }}></img>
+            <Image className="navbar-hamburger block lg:hidden me-4" src="/menu-burger.svg" width={24} height={24} alt="選單" unoptimized
+                onClick={() => { setIsMobileNavbarExpanded(!isMobileNavbarExpanded); }}></Image>
             <div className="navbar-options-area">
                 <div className="navbar-options-front-area">
                     <Link className="me-4 navbar-option" href="/About">關於我們</Link>
@@ -59,7 +60,7 @@ export default function NavbarClinet({ isLoginDefalut }) {
                         isLogin && <>
                             <Link href="/User/Cart" className="me-4 navbar-option">
                                 <div className="flex items-center relative">
-                                    <img className="cart-icon" src="/cart-primary.png"></img>
+                                    <Image className="cart-icon" src="/cart-primary.png" width={107} height={100} alt="購物車"></Image>
                                     <span className="ml-2 lg:hidden">購物車</span>
                                     {
                                         Array.isArray(cartData?.cart_items) && <span className="cart-count-badge">{cartData?.cart_items?.length}</span>

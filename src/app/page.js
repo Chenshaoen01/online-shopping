@@ -3,6 +3,7 @@ import FAQComponent from "@/components/FAQComponent";
 import BannerCarousel from "@/components/BannerCarousel";
 import ProductCarousel from "@/components/ProductCarousel"
 import Link from 'next/link';
+import Image from 'next/image';
 import { serverFetch } from "@/api/server";
 export default async function Home() {
   const categoryDataList = [
@@ -53,7 +54,7 @@ export default async function Home() {
                 <Link href={`/Product/List/${category.category_id}`} className="category-card">
                   <p className="category-card-title">{category.category_name}</p>
                   <div className="category-card-en font-bold">{category.category_en_name}</div>
-                  <img className="category-card-icon my-4" src='/arrow.png'></img>
+                  <Image className="category-card-icon my-4" src="/arrow.png" width={35} height={21} alt=""></Image>
                   <div className="category-card-img" style={{ backgroundImage: `url('${category.category_img}')` }}></div>
                 </Link>
               </div>)

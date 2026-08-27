@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState, useCallback } from "react"
 import MicroModal from 'micromodal';
+import Image from 'next/image';
 import { imageUrl, backgroundImage } from '@/api/files';
 
 export default function ProductImgArea({ productSubImgList }) {
@@ -34,11 +35,11 @@ export default function ProductImgArea({ productSubImgList }) {
                 (Array.isArray(productSubImgList) && productSubImgList.length > 0) && <div className="product-sub-img-area-container mt-4">
                     <button className="product-sub-img-switch-button product-sub-img-switch-button-prev" type="button"
                         onClick={() => { subImgOnclick('prev') }}>
-                        <img className="product-sub-img-switch-icon" src="/angle-left.svg"></img>
+                        <Image className="product-sub-img-switch-icon" src="/angle-left.svg" width={24} height={24} alt="上一張" unoptimized></Image>
                     </button>
                     <button className="product-sub-img-switch-button  product-sub-img-switch-button-next" type="button"
                         onClick={() => { subImgOnclick('next') }}>
-                        <img className="product-sub-img-switch-icon" src="/angle-right.svg"></img>
+                        <Image className="product-sub-img-switch-icon" src="/angle-right.svg" width={24} height={24} alt="下一張" unoptimized></Image>
                     </button>
                     <div className="product-sub-img-area">
                         {
@@ -60,9 +61,9 @@ export default function ProductImgArea({ productSubImgList }) {
                     <main className="flex" id="modal-1-content">
                         <div className="fixed top-4 right-4 modal__close cursor-pointer"
                              aria-label="Close modal" data-micromodal-close>
-                             <img className="close-icon" src="/x-circle-fill.svg"></img>
+                             <Image className="close-icon" src="/x-circle-fill.svg" width={16} height={16} alt="" unoptimized></Image>
                         </div>
-                        <img className="product-modal-img w-full" src={imageUrl(productSubImgList[mainImgIndex])}></img>
+                        <Image className="product-modal-img w-full h-auto" src={imageUrl(productSubImgList[mainImgIndex])} width={800} height={800} alt="商品圖片"></Image>
                     </main>
                 </div>
             </div>

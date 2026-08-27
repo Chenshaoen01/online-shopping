@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import alertify from 'alertifyjs';
 import { useLoading } from '@/components/LoadingProvider';
 import { apiFetch } from '@/api/client';
@@ -183,7 +184,7 @@ export default function UserForm({ pageType }) {
                     <div className="col-span-12 md:col-span-5">
                         <div className="userpage-form-area-container">
                             <div className="userpage-form-area">
-                                <img className="userpage-logo me-2 mb-4" src="/logo1.png" alt="Logo"></img>
+                                <Image className="userpage-logo me-2 mb-4" src="/logo1.png" width={501} height={500} alt=""></Image>
                                 <div className="userpage-form-title-area mb-4">
                                     <p className="text-center font-bold text-3xl mb-2">毛孩物坊</p>
                                     <p className="text-center font-bold text-xl">

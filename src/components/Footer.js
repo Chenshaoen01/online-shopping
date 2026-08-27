@@ -1,7 +1,9 @@
+import Image from "next/image";
+
 export default function Footer() {
     return <div className="footer flex flex-col items-center mt-auto">
         <div className="flex items-center mb-2">
-            <img className="footer-logo me-2" src="/logo1.png"></img>
+            <Image className="footer-logo me-2" src="/logo1.png" width={501} height={500} alt=""></Image>
             <span className="font-bold whitespace-nowrap">毛孩物坊</span>
         </div>
         <div className="flex flex-col md:flex-row text-center">

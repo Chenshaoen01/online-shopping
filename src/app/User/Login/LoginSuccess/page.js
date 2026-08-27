@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { apiFetch } from "@/api/client"
 
 export default function LoginSuccessPage() {
@@ -31,7 +32,7 @@ export default function LoginSuccessPage() {
 
     return <>
         <div className="primary-color-background flex flex-col justify-center items-center">
-            <img className="primary-color-background-img me-2" src="/logo1.png"></img>
+            <Image className="primary-color-background-img me-2" src="/logo1.png" width={501} height={500} alt="毛孩物坊"></Image>
             <p className="text-3xl font-bold mt-8">{resultText}</p>
             {
                 errorMessage !== "" && <>

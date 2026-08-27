@@ -367,6 +367,7 @@ body {
 
 .category-card-icon {
   width: 30px;
+  height: auto;
 }
 
 /* 商品列表 */
