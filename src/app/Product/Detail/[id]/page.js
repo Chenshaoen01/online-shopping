@@ -49,7 +49,7 @@ export default async function ProductDetailPage({ params }) {
         <Navbar></Navbar>
         <div className="main-content-area">
             <div className="custom-container">
-                <div className="section-title my-8">商品列表</div>
+                <div className="section-title my-8">商品資訊</div>
                 <div className="grid grid-cols-12">
                     {/* 圖片 */}
                     <div className="col-span-12 md:col-span-7">
