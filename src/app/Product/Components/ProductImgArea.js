@@ -62,7 +62,7 @@ export default function ProductImgArea({ productSubImgList }) {
                              aria-label="Close modal" data-micromodal-close>
                              <Image className="close-icon" src="/x-circle-fill.svg" width={16} height={16} alt="" unoptimized></Image>
                         </div>
-                        <Image className="product-modal-img w-full h-auto" src={imageUrl(productSubImgList[mainImgIndex])} width={800} height={800} alt="商品圖片"></Image>
+                        <Image className="product-modal-img w-full h-auto" src={imageUrl(productSubImgList[mainImgIndex])} width={800} height={800} alt="商品圖片" unoptimized></Image>
                     </main>
                 </div>
             </div>

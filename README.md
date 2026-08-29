@@ -144,6 +144,10 @@ JWT 本身在 HttpOnly cookie 裡，CSRF token 的作用是「證明請求來自
 其中 4 個 SVG 圖示使用 `unoptimized` —— SVG 是向量格式沒有壓縮空間，
 而 Next.js 的圖片最佳化服務預設拒絕 SVG（可內嵌腳本），與其放寬安全設定不如直接跳過。
 
+商品圖片燈箱也使用 `unoptimized`，理由不同：主圖是以 CSS `background-image` 顯示的原始網址，
+燈箱若走最佳化服務會產生另一個網址，等於同一張圖下載兩次、而且點開時要等第二次下載完成。
+維持同一個網址才能直接命中瀏覽器快取，點開即顯示。
+
 ### middleware 只檢查 cookie 是否存在
 
 `middleware.js` 不呼叫 API 驗證 JWT，只確認 cookie 在不在。
