@@ -158,7 +158,6 @@ export default function UserForm({ pageType }) {
             'response_type': 'id_token',
             'scope': 'openid email profile',
             'nonce': crypto.randomUUID(),
-            'include_granted_scopes': 'true',
             'state': 'pass-through value',
         };
 
