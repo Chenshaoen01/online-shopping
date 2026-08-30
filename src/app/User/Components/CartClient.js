@@ -88,7 +88,7 @@ export default function CartClient() {
                                                             <p><span className="title-md">單價</span>NT$ {cartItem.model_price}</p>
                                                             <p><span className="title-md">小計</span>NT$ {cartItem.item_price}</p>
                                                         </div>
-                                                        <div className="flex items-center justify-center mt-4 md:mt-0">
+                                                        <div className="relative z-10 flex items-center justify-center mt-4 md:mt-0">
                                                             <button type="button" className="button-md button-dark"
                                                                 onClick={() => { deleteConfirm(cartItem.cart_item_id) }}>刪除</button>
                                                         </div>
